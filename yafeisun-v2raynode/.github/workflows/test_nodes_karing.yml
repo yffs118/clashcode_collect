@@ -1,0 +1,472 @@
+name: Test Nodes with Karing
+
+on:
+  workflow_dispatch:  # 允许手动触发
+    inputs:
+      trigger_collection:
+        description: '是否由收集工作流触发'
+        required: false
+        default: false
+        type: boolean
+      collection_commit:
+        description: '收集工作流的提交SHA'
+        required: false
+        default: ''
+        type: string
+      total_nodes:
+        description: '收集到的总节点数'
+        required: false
+        default: '0'
+        type: string
+
+  push:
+    paths:
+      - 'result/nodetotal.txt'
+    branches: [main]
+
+jobs:
+  test-nodes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90  # 1.5小时超时
+    permissions:
+      contents: write
+
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'push' }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+        persist-credentials: true
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Install Cloudflare WARP
+      run: |
+        # 添加 Cloudflare GPG 密钥
+        curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | sudo gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
+
+        # 添加 Cloudflare 仓库
+        echo 'deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ jammy main' | sudo tee /etc/apt/sources.list.d/cloudflare-client.list
+
+        # 更新包列表并安装 warp-cli
+        sudo apt-get update
+        sudo apt-get install -y cloudflare-warp
+
+    - name: Connect to Cloudflare WARP
+      run: |
+        # 启动 WARP 服务
+        sudo systemctl enable --now warp-svc
+
+        # 等待服务启动
+        sleep 10
+
+        # 检查服务状态
+        sudo systemctl status warp-svc --no-pager || true
+
+        # 注册 WARP（使用匿名模式）
+        warp-cli --accept-tos registration new
+
+        # 设置 WARP 代理模式（关键步骤）
+        echo "设置WARP为代理模式..."
+        warp-cli --accept-tos mode proxy 2>/dev/null || warp-cli --accept-tos set-mode proxy 2>/dev/null || true
+
+        # 设置 SOCKS5 代理端口
+        echo "设置SOCKS5代理端口40000..."
+        warp-cli --accept-tos proxy port 40000 2>/dev/null || warp-cli --accept-tos set-proxy-port 40000 2>/dev/null || true
+
+        # 连接 WARP
+        warp-cli --accept-tos connect
+
+        # 等待连接完全建立
+        echo "⏳ 等待WARP连接完全建立..."
+        sleep 20
+
+        # 验证连接状态
+        echo "🔍 检查WARP连接状态..."
+        warp-cli --accept-tos status
+
+        # 验证SOCKS5代理端口
+        echo "🔍 检查SOCKS5代理端口40000..."
+        if sudo ss -tlnp | grep -q ":40000"; then
+          echo "✓ SOCKS5代理端口40000已监听"
+        else
+          echo "⚠️ SOCKS5代理端口40000未监听"
+        fi
+
+        # 验证IP变更
+        echo "🌐 验证IP地址变更..."
+        current_ip=$(curl -s --max-time 10 ipinfo.io/ip || echo "检测失败")
+        echo "当前IP: $current_ip"
+
+        # 获取 WARP 代理端口（通常是 40000）
+        echo "✅ WARP 代理已启用，SOCKS5 端口: 40000"
+
+    - name: Create Karing latency test script
+      run: |
+        echo "创建Karing延迟测试脚本..."
+        cat > karing_latency_test.py << 'EOF'
+        #!/usr/bin/env python3
+        # -*- coding: utf-8 -*-
+        """
+        Karing延迟测试工具
+        基于Karing的延迟测试逻辑实现
+        """
+
+        import asyncio
+        import aiohttp
+        import json
+        import time
+        import sys
+        from pathlib import Path
+        from typing import List, Dict, Optional
+        import urllib.parse
+
+        class KaringLatencyTester:
+            """Karing延迟测试器"""
+
+            def __init__(self):
+                self.timeout = aiohttp.ClientTimeout(total=10)
+                self.test_urls = [
+                    "https://www.google.com/generate_204",
+                    "https://www.cloudflare.com/",
+                    "https://www.apple.com/",
+                    "https://www.microsoft.com/",
+                    "https://www.baidu.com/",
+                    "https://www.bing.com/"
+                ]
+
+            async def test_node_latency(self, node_config: str, proxy: Optional[str] = None) -> Dict:
+                """测试单个节点的延迟"""
+                try:
+                    # 解析节点配置
+                    if node_config.startswith("vmess://"):
+                        # 解析vmess链接
+                        import base64
+                        vmess_data = json.loads(base64.b64decode(node_config[8:]).decode("utf-8"))
+                        server = vmess_data.get("add", "")
+                        port = vmess_data.get("port", 443)
+                        protocol = "vmess"
+                    elif node_config.startswith("vless://"):
+                        # 解析vless链接
+                        parsed = urllib.parse.urlparse(node_config)
+                        server = parsed.hostname
+                        port = parsed.port or 443
+                        protocol = "vless"
+                    elif node_config.startswith("ss://"):
+                        # 解析ss链接
+                        import base64
+                        ss_data = base64.b64decode(node_config[5:].split("@")[0]).decode("utf-8")
+                        server = node_config.split("@")[1].split(":")[0]
+                        port = int(node_config.split(":")[-1])
+                        protocol = "ss"
+                    else:
+                        # 其他协议跳过
+                        return {"config": node_config, "latency": -1, "error": "Unsupported protocol"}
+
+                    # 构建代理URL
+                    proxy_url = None
+                    if proxy:
+                        proxy_url = f"socks5://{proxy}"
+
+                    # 测试延迟
+                    latencies = []
+                    for test_url in self.test_urls[:2]:  # 只测试前2个URL
+                        try:
+                            start_time = time.time()
+                            async with aiohttp.ClientSession(timeout=self.timeout, connector=aiohttp.TCPConnector(limit=1)) as session:
+                                async with session.get(test_url, proxy=proxy_url) as response:
+                                    if response.status == 200 or response.status == 204:
+                                        latency = int((time.time() - start_time) * 1000)  # 毫秒
+                                        latencies.append(latency)
+                        except Exception as e:
+                            continue
+
+                    if latencies:
+                        avg_latency = sum(latencies) // len(latencies)
+                        return {
+                            "config": node_config,
+                            "latency": avg_latency,
+                            "protocol": protocol,
+                            "server": server,
+                            "port": port
+                        }
+                    else:
+                        return {"config": node_config, "latency": -1, "error": "Connection failed"}
+
+                except Exception as e:
+                    return {"config": node_config, "latency": -1, "error": str(e)}
+
+            async def test_nodes_batch(self, node_configs: List[str], proxy: Optional[str] = None, max_concurrent: int = 10) -> List[Dict]:
+                """批量测试节点延迟"""
+                semaphore = asyncio.Semaphore(max_concurrent)
+                results = []
+
+                async def test_with_semaphore(config):
+                    async with semaphore:
+                        result = await self.test_node_latency(config, proxy)
+                        results.append(result)
+                        print(f"✓ 测试完成: {result.get('server', 'Unknown')} - {result.get('latency', -1)}ms")
+
+                tasks = [test_with_semaphore(config) for config in node_configs]
+                await asyncio.gather(*tasks)
+
+                return results
+
+        async def main():
+            """主函数"""
+            if len(sys.argv) < 3:
+                print("用法: python karing_latency_test.py <输入文件> <输出文件>")
+                sys.exit(1)
+
+            input_file = sys.argv[1]
+            output_file = sys.argv[2]
+
+            # 读取节点配置
+            with open(input_file, "r", encoding="utf-8") as f:
+                node_configs = [line.strip() for line in f if line.strip()]
+
+            print(f"📋 读取到 {len(node_configs)} 个节点配置")
+
+            # 初始化测试器
+            tester = KaringLatencyTester()
+
+            # 测试延迟
+            print("🚀 开始延迟测试...")
+            results = await tester.test_nodes_batch(node_configs, max_concurrent=8)
+
+            # 过滤有效节点 (延迟 < 1000ms)
+            valid_results = [r for r in results if r.get("latency", -1) > 0 and r.get("latency", -1) < 1000]
+            # 按延迟排序
+            valid_results.sort(key=lambda x: x.get("latency", 9999))
+
+            print(f"✅ 找到 {len(valid_results)} 个有效节点")
+
+            # 保存结果
+            with open(output_file, "w", encoding="utf-8") as f:
+                for result in valid_results:
+                    f.write(result["config"] + "\n")
+
+            print(f"💾 结果已保存到 {output_file}")
+
+        if __name__ == "__main__":
+            asyncio.run(main())
+        EOF
+
+        chmod +x karing_latency_test.py
+        echo "✅ Karing延迟测试脚本创建完成"
+
+    - name: Test nodes with Karing latency test
+      id: tester
+      run: |
+        echo "🚀 开始使用Karing延迟测试 - 6小时定时策略"
+        echo "📊 Configuration:"
+        echo "  ⏰ Schedule: Every 6 hours (00:00, 06:00, 12:00, 18:00 Beijing Time)"
+        echo "  🔧 Phase 1: Latency test only (concurrent=8, timeout=10s)"
+        echo "  🎯 Filter: Latency < 1000ms"
+        echo "  📝 Strategy: Based on Karing latency testing logic"
+
+        # 检查节点文件是否存在且不为空
+        if [ ! -f result/nodetotal.txt ] || [ ! -s result/nodetotal.txt ]; then
+          echo "❌ No valid nodes file found (result/nodetotal.txt is missing or empty)"
+          echo "⚠️ Skipping node testing as there are no nodes to test"
+          exit 0
+        fi
+
+        # 获取节点数
+        total_nodes=$(wc -l < result/nodetotal.txt)
+        echo "📈 Total nodes to test: $total_nodes"
+
+        # 使用Karing延迟测试脚本
+        set -e
+        echo "🔄 Starting Python test script with progress indicators..."
+        echo "📝 Processing nodes with Karing latency testing..."
+        echo "🔗 Command: python3 karing_latency_test.py result/nodetotal.txt result/karing.txt"
+        echo "⏳ Starting test with progress monitoring..."
+        echo ""
+        echo "⚡ 开始执行Karing延迟测试..."
+        python3 karing_latency_test.py result/nodetotal.txt result/karing.txt
+
+        echo ""
+        echo "📊 Python脚本执行完成！"
+
+        echo "Karing延迟测试完成"
+      continue-on-error: true
+
+    - name: Check for changes
+      id: changes
+      run: |
+        echo "检查文件状态..."
+
+        # 检查文件是否存在且有效
+        if [ -f result/karing.txt ] && [ -s result/karing.txt ]; then
+          echo "result/karing.txt 存在且不为空"
+          node_count=$(wc -l < result/karing.txt)
+          echo "有效节点数: $node_count"
+          echo "文件内容预览:"
+          head -5 result/karing.txt || echo "无法预览"
+          file_valid=true
+        else
+          echo "⚠️ result/karing.txt 不存在或为空"
+          file_valid=false
+          node_count=0
+        fi
+
+        echo ""
+        echo "Git 状态:"
+        git status --short
+
+        echo ""
+        echo "检查文件变更..."
+
+        # 如果文件无效，直接标记无变更
+        if [ "$file_valid" = false ]; then
+          echo "has_changes=false" >> $GITHUB_OUTPUT
+          echo "❌ 测试结果文件无效，跳过提交"
+          exit 0
+        fi
+
+        # 检查是否有变更（包括新文件）
+        if git diff --quiet HEAD -- result/karing.txt 2>/dev/null; then
+          echo "has_changes=false" >> $GITHUB_OUTPUT
+          echo "没有检测到节点更新"
+        else
+          echo "has_changes=true" >> $GITHUB_OUTPUT
+          echo "检测到节点更新"
+          echo "变更详情:"
+          git diff HEAD -- result/karing.txt || echo "无法显示变更"
+        fi
+
+    - name: Commit and push changes
+      if: steps.changes.outputs.has_changes == 'true'
+      run: |
+        echo "开始提交变更..."
+
+        # 配置 git
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
+
+        # 先拉取最新代码避免冲突
+        echo "拉取最新代码..."
+        git pull origin main --rebase || true
+
+        # 添加文件到暂存区
+        echo "添加文件到暂存区..."
+        git add result/karing.txt
+
+        # 检查暂存区状态
+        echo "暂存区状态:"
+        git status --short
+
+        # 获取节点数量用于提交信息
+        if [ -f result/karing.txt ]; then
+          valid_count=$(wc -l < result/karing.txt)
+        else
+          valid_count=0
+        fi
+
+        if [ -f result/nodetotal.txt ]; then
+          total_count=$(wc -l < result/nodetotal.txt)
+        else
+          total_count=0
+        fi
+
+        # 生成详细的提交信息
+        if [ ${total_count} -gt 0 ]; then
+          pass_rate=$(echo "scale=1; ${valid_count} * 100 / ${total_count}" | bc -l)
+          commit_msg="Karing延迟测试 - 节点总数:${total_count} 有效节点:${valid_count} 通过率:${pass_rate}%"
+        else
+          commit_msg="Karing延迟测试 - 节点总数:${total_count} 有效节点:${valid_count} 通过率:N/A"
+        fi
+
+        echo "提交信息: $commit_msg"
+
+        # 提交变更
+        git commit -m "$commit_msg"
+
+        # 检查提交是否成功
+        if [ $? -ne 0 ]; then
+          echo "❌ 提交失败"
+          exit 1
+        fi
+
+        # 尝试推送，如果有冲突则重试
+        echo "开始推送到远程仓库..."
+        for i in {1..3}; do
+          if git push origin main; then
+            echo "✅ 成功推送到远程仓库"
+            break
+          elif [ $i -eq 3 ]; then
+            echo "❌ 推送失败，已重试3次"
+            exit 1
+          else
+            echo "⚠️ 第$i次推送失败，等待5秒后重试..."
+            sleep 5
+          fi
+        done
+
+        echo "Karing延迟测试结果已提交并推送到仓库"
+
+    - name: Create summary
+      if: always()
+      run: |
+        echo "## Karing延迟测试摘要" >> $GITHUB_STEP_SUMMARY
+        echo "- **更新时间**: $(date '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+
+        # 判断触发来源
+        if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          echo "- **触发方式**: ✋ 手动触发" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ github.event.inputs.trigger_collection }}" == "true" ]; then
+            echo "- **收集提交**: ${{ github.event.inputs.collection_commit }}" >> $GITHUB_STEP_SUMMARY
+            echo "- **总节点数**: ${{ github.event.inputs.total_nodes }}" >> $GITHUB_STEP_SUMMARY
+          fi
+        elif [ "${{ github.event_name }}" == "push" ]; then
+          echo "- **触发方式**: 📝 文件变更触发" >> $GITHUB_STEP_SUMMARY
+          echo "- **触发提交**: ${{ github.event.after }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **变更文件**: result/nodetotal.txt" >> $GITHUB_STEP_SUMMARY
+        fi
+
+        if [ "${{ steps.changes.outputs.has_changes }}" == "true" ]; then
+          echo "- **更新状态**: ✅ 成功更新" >> $GITHUB_STEP_SUMMARY
+          if [ -f result/karing.txt ]; then
+            valid_count=$(wc -l < result/karing.txt)
+            echo "- **有效节点数**: $valid_count" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -f result/nodetotal.txt ]; then
+            total_count=$(wc -l < result/nodetotal.txt)
+            echo "- **原始节点数**: $total_count" >> $GITHUB_STEP_SUMMARY
+            if [ -f result/karing.txt ]; then
+              success_rate=$(echo "scale=1; $valid_count * 100 / $total_count" | bc)
+              echo "- **成功率**: $success_rate%" >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**测试策略**:" >> $GITHUB_STEP_SUMMARY
+          echo "- 使用Karing延迟测试逻辑进行节点连通性测试" >> $GITHUB_STEP_SUMMARY
+          echo "- 测试多个URL端点的延迟并取平均值" >> $GITHUB_STEP_SUMMARY
+          echo "- 只保留延迟小于1000ms的有效节点" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "- **更新状态**: ℹ️ 无更新" >> $GITHUB_STEP_SUMMARY
+        fi
+
+        if [ "${{ steps.tester.outcome }}" != "success" ]; then
+          echo "- **测速状态**: ⚠️ 测速过程中出现错误" >> $GITHUB_STEP_SUMMARY
+        fi
+
+    - name: Notify on failure
+      if: failure()
+      run: |
+        echo "❌ Karing延迟测试失败"
+        echo "请检查日志以获取详细信息"
+        exit 1

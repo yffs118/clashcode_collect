@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+.env
+
+# Output
+output/
+*.log
+
+# Config (contains sources, should be set via GitHub Secrets)
+config/
+.secrets
+
+# sing-box binary (cached)
+bin/

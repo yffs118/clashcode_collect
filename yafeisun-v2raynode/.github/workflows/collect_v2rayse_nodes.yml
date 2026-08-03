@@ -1,0 +1,88 @@
+name: Collect V2RaySE Nodes
+
+on:
+  schedule:
+    # 每4小时执行一次 (0, 4, 8, 12, 16, 20点)
+    - cron: '0 */4 * * *'
+  workflow_dispatch: # 支持手动触发
+
+jobs:
+  collect-nodes:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        # 配置token以便后续推送更改
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Install Playwright browsers
+      run: |
+        python -m playwright install chromium
+        python -m playwright install-deps
+
+    - name: Run V2RaySE node collection
+      run: |
+        python src/v2rayse_collector.py
+      continue-on-error: true
+
+    - name: Check if result file exists
+      id: check_result
+      run: |
+        if [ -f "result/v2rayse.txt" ]; then
+          echo "result_exists=true" >> $GITHUB_OUTPUT
+          echo "✅ 节点收集成功"
+        else
+          echo "result_exists=false" >> $GITHUB_OUTPUT
+          echo "❌ 节点收集失败"
+        fi
+
+    - name: Commit and push results
+      if: steps.check_result.outputs.result_exists == 'true'
+      run: |
+        # 配置git
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+
+        # 检查是否有更改
+        if git diff --quiet result/v2rayse.txt; then
+          echo "没有新的节点数据，跳过提交"
+        else
+          # 只添加V2RaySE相关的文件
+          git add result/v2rayse.txt
+
+          # 生成提交信息
+          node_count=$(wc -l < result/v2rayse.txt)
+          commit_msg="[V2RaySE] Update nodes: $node_count nodes collected"
+
+          # 提交更改
+          git commit -m "$commit_msg"
+
+          # 推送到远程
+          git push
+          echo "✅ 成功提交 $node_count 个V2RaySE节点"
+        fi
+      continue-on-error: true
+
+    - name: Log execution summary
+      run: |
+        echo "=== V2RaySE 节点收集任务完成 ==="
+        if [ -f "result/v2rayse.txt" ]; then
+          node_count=$(wc -l < result/v2rayse.txt)
+          echo "📊 收集节点数量: $node_count"
+          echo "📁 结果文件: result/v2rayse.txt"
+        else
+          echo "❌ 收集失败"
+        fi
+        echo "🕐 下次执行时间: $(date -d '+4 hours' '+%Y-%m-%d %H:%M:%S UTC')"

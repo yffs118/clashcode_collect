@@ -1,0 +1,75 @@
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+*.tmp
+*.temp
+
+# Date-based result folders (YYYYMMDD format)
+result/[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]/
+
+# Processed node data (temporary files)
+data/processed/*.json
+
+# Subs-check binary and config
+subscheck/bin/
+subscheck/config/config.yaml
+
+# Output files (test results)
+result/output/
+
+# Raw HTML files (temporary)
+data/raw/
+
+# Debug files (temporary)
+data/debug/

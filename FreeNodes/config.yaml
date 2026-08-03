@@ -1,0 +1,130 @@
+crawl:
+  concurrency: 2
+  max_articles: 3
+  timeout: 30
+llm:
+  providers:
+  - api_key_env: OPENROUTER_API_KEY
+    base_url: https://openrouter.ai/api/v1
+    default_weight: 50
+    is_reasoning_model: false
+    models:
+    - openrouter/free
+    name: openrouter
+  - api_key_env: CEREBRAS_API_KEY
+    base_url: https://api.cerebras.ai/v1
+    default_weight: 30
+    is_reasoning_model: true
+    models:
+    - zai-glm-4.7
+    - gpt-oss-120b
+    name: cerebras
+  - api_key_env: OPENCODE_API_KEY
+    base_url: https://opencode.ai/zen/v1
+    default_weight: 20
+    is_reasoning_model: false
+    models:
+    - deepseek-v4-flash-free
+    name: opencode
+  task_routing:
+    extract_links:
+      cerebras: 30
+      opencode: 10
+      openrouter: 60
+    generate_pattern:
+      cerebras: 30
+      opencode: 0
+      openrouter: 70
+output:
+  dir: nodes
+sites:
+- description: blog site, article titles contain dates (month-day format), each article
+    provides subscription links directly
+  name: clashmeta
+  node_count: 15
+  start_url: https://clash-meta.github.io/free-nodes/
+  type: simple
+  up_date: '2026-07-31'
+- description: blog listing articles with date in title like '6月19日|...', each article
+    contains clash/v2ray txt/yaml subscription links
+  link_pattern: https://node\.nodev2ray\.com/uploads/\d{4}/\d{2}/(?:[0-9]+-)?\d{8}\.(?:txt|yaml|json)
+  name: nodev2ray
+  start_url: https://nodev2ray.com/free-node/
+  type: simple
+  up_date: '2026-08-02'
+- description: blog with dated articles (URLs contain YYYY-M-D), each article lists
+    clash/v2ray/sing-box subscription file links
+  name: freeclashnode
+  start_url: https://www.freeclashnode.com/free-node/
+  type: simple
+  up_date: '2026-08-01'
+- description: blog listing articles with date in title and URL, each provides clash/v2ray
+    txt/yaml subscription links
+  link_pattern: https://node\.clashnode\.cc/uploads/\d{4}/\d{2}/(?:\d+-\d{8}\.(?:txt|yaml)|\d{8}\.json)
+  name: clashnode
+  node_count: 2
+  start_url: https://clashnode.cc/free-node/
+  type: simple
+  up_date: '2026-08-02'
+- description: blog with article titles containing dates (month-day format), articles
+    contain clash/v2ray subscription links
+  link_pattern: https://oss\.oneclash\.cc/\d{4}/\d{2}/\d{8}\.(?:txt|yaml)
+  name: oneclash
+  node_count: 4
+  start_url: https://oneclash.cc/freenode/
+  type: simple
+  up_date: '2026-08-02'
+- description: blogger blog, article dates in title as 'YYYY年MM月DD日', each post contains
+    subscription links
+  link_pattern: https://nodebuf\.com/files/public/[a-z0-9]+/preview
+  name: cfmem
+  start_url: https://www.cfmem.com/
+  type: simple
+- description: blog with dated articles (title format '2026-06-19'), each article
+    lists free subscription links
+  name: jichangx
+  start_url: https://jichangx.com/free-subscription/
+  type: simple
+- description: blog listing articles with date in title like '2026/6/19' or '6月19日',
+    each contains SSR/V2Ray/Clash links
+  link_pattern: https?://clashstair\.cczzuu\.top/node/\d{8}\.(?:txt|yaml)
+  name: clashstair
+  node_count: 6
+  start_url: https://clashstair.com/category/freenode/
+  type: simple
+  up_date: '2026-08-02'
+- description: blog with dates in both title ('YYYY年MM月DD日') and URL (/post/YYYYMMDD/),
+    each post has subscription links
+  link_pattern: https://free\.datiya\.com/uploads/\d{8}-[A-Za-z0-9_-]+\.(?:txt|yaml)
+  name: datiya
+  node_count: 3
+  start_url: https://free.datiya.com/
+  type: simple
+  up_date: '2026-08-02'
+- description: blog with password-protected articles, password from YouTube video
+    subtitles (4-digit AABB/ABAB)
+  link_pattern: https://hh\.yudou226\.top/\d{6}/\d{8}[a-z0-9]+\.[a-z]{3,4}
+  name: yudou
+  node_count: 6
+  pwd_hint: 4-digit AABB or ABAB pattern, password verbally given in YouTube video
+  start_url: https://www.yudou789.top/category/jiedian/
+  type: yt_pwd
+  up_date: '2026-08-02'
+  yt_hint: each article has a YouTube link, video subtitles contain the decryption
+    password
+- description: YouTube channel, each video description contains a Google Drive link,
+    zip file contains subscription files
+  name: fxrj
+  node_count: 6
+  start_url: https://www.youtube.com/@fxrj/videos/
+  type: cloud_drive
+  up_date: '2026-07-23'
+  yt_hint: video description has '本期资源下载地址' section with drive link
+- description: YouTube channel, each video description contains a paste.to link, paste.to
+    requires password from subtitles
+  name: zyfxs
+  pwd_hint: 4-digit password from video subtitles, paste.to fragment key also in description
+  start_url: https://www.youtube.com/@ZYFXS/videos/
+  type: cloud_drive
+  up_date: '2026-07-23'
+  yt_hint: video description contains '本期资源' paste.to link with fragment key

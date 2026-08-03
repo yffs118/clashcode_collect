@@ -1,0 +1,47 @@
+proxies:
+- client-fingerprint: firefox
+  encryption: none
+  flow: xtls-rprx-vision
+  name: 🇸🇪SE_1|2.4MB/s
+  network: tcp
+  port: '443'
+  reality-opts:
+    public-key: L1mMPvSystB6rMgj4GnHizy37M_M1gj_krywNf3hfHc
+    short-id: '!!str c1a3b5d7e9f02468'
+  server: 162.248.163.237
+  servername: sw.tunnelx.space
+  tls: true
+  type: vless
+  udp: true
+  uuid: ab7d5ea9-6eca-47c3-b14b-67378fc2d7c2
+  xudp: true
+- client-fingerprint: chrome
+  name: SE_speednode_0236
+  network: ws
+  port: 443
+  server: 193.181.210.149
+  servername: sni.ehb.cc.cd
+  skip-cert-verify: true
+  tls: true
+  type: vless
+  udp: true
+  uuid: ef6c9625-62de-4b9d-b7e2-0d4a9f67a9b2
+  ws-opts:
+    headers:
+      Host: sni.ehb.cc.cd
+    path: /proxyip=ProxyIP.CMLiussss.net
+- client-fingerprint: chrome
+  name: SE_speednode_0237
+  network: ws
+  port: 443
+  server: 16.16.207.129
+  servername: sni.ehb.cc.cd
+  skip-cert-verify: true
+  tls: true
+  type: vless
+  udp: true
+  uuid: ef6c9625-62de-4b9d-b7e2-0d4a9f67a9b2
+  ws-opts:
+    headers:
+      Host: sni.ehb.cc.cd
+    path: /proxyip=ProxyIP.CMLiussss.net
