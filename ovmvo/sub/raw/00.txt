@@ -5,3 +5,6 @@ https://raw.githubusercontent.com/ovmvo/FreeSub/refs/heads/main/sub/raw/04.yaml
 https://raw.githubusercontent.com/ovmvo/FreeSub/refs/heads/main/sub/raw/05.yaml
 https://raw.githubusercontent.com/ovmvo/FreeSub/refs/heads/main/sub/raw/06.yaml
 https://raw.githubusercontent.com/ovmvo/FreeSub/refs/heads/main/sub/raw/07.yaml
+https://raw.githubusercontent.com/ovmvo/FreeSub/refs/heads/main/sub/raw/08.yaml
+https://raw.githubusercontent.com/ovmvo/FreeSub/refs/heads/main/sub/raw/09.yaml
+https://raw.githubusercontent.com/ovmvo/FreeSub/refs/heads/main/sub/raw/10.yaml
