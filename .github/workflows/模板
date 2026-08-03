@@ -1,0 +1,135 @@
+name: 优化版Sync GitHub Repos to Subfolders and unzip (只增不减)
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   
+    - cron: '0 0 * * *'       # 每天 UTC 0 点执行
+  workflow_dispatch:          # 支持手动触发
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+concurrency:
+  group: sync_job_lock
+  cancel-in-progress: true
+
+jobs:
+  sync_and_unzip:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ---------- 1. 检出主仓库 ----------
+      - name: Checkout default branch
+        uses: actions/checkout@v4
+
+      # ---------- 2. Git 配置（用户名、邮箱、HTTP缓冲区） ----------
+      - name: Set up Git config & buffer
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config http.postBuffer 524288000   # 500MB，适配大文件
+
+      # ---------- 3. 重置主仓库到最新 ----------
+      - name: Reset repo to latest
+        run: |
+          DEFAULT_BRANCH=$(git remote show origin | sed -n '/HEAD branch/s/.*: //p')
+          echo "DEFAULT_BRANCH=$DEFAULT_BRANCH" >> $GITHUB_ENV
+          git fetch origin $DEFAULT_BRANCH
+          git checkout $DEFAULT_BRANCH || git checkout -b $DEFAULT_BRANCH
+          git reset --hard origin/$DEFAULT_BRANCH
+          git clean -fdx
+
+      # ---------- 4. 同步子仓库（TVAPP 等）—— 只覆盖，不删除 ----------
+      - name: Fetch subprojects（只覆盖，不删除）
+        run: |
+          declare -A repos=(
+            [BestClash]="https://github.com/PuddinCat/BestClash.git" 
+            [FreeNodes]="https://github.com/Barabama/FreeNodes.git" 
+            [Jsnzkpg]="https://github.com/Jsnzkpg/Jsnzkpg.git" 
+            [anaer]="https://github.com/anaer/Sub.git" 
+            [clashfree]="https://github.com/free-nodes/clashfree.git" 
+            [NoMoreWalls]="https://github.com/peasoft/NoMoreWalls.git" 
+             [v2ray]="https://github.com/free18/v2ray.git" 
+             [AutoMergePublicNodes]="https://github.com/chengaopan/AutoMergePublicNodes.git"
+             [awesome-vpn]="https://github.com/awesome-vpn/awesome-vpn.git" 
+             [ovmvo]="https://github.com/ovmvo/FreeSub.git" 
+             [ermaozi]="https://github.com/ermaozi/get_subscribe.git"
+             [yafeisun-v2raynode]="https://github.com/yafeisun/v2raynode.git"
+            # 可按需添加更多，格式：[子目录名]="仓库URL"
+          )
+          for name in "${!repos[@]}"; do
+            echo "→ 同步 $name"
+            rm -rf "temp-$name"
+            git clone --depth 1 "${repos[$name]}" "temp-$name" || {
+              echo "❌ 克隆失败 $name，跳过（保留原有文件夹）"
+              rm -rf "temp-$name"
+              continue
+            }
+            mkdir -p "$name"
+            rsync -a --exclude='.git' "temp-$name"/ "$name"/   # 无 --delete
+            rm -rf "temp-$name"
+          done
+
+      # ---------- 5. 同步 DustinWin _posts ----------
+      - name: Sync DustinWin _posts
+        run: |
+          rm -rf temp-dustinwin
+          git clone --depth 1 https://github.com/DustinWin/dustinwin.github.io.git temp-dustinwin || exit 0
+          mkdir -p _posts
+          rsync -a --exclude='.git' temp-dustinwin/_posts/ _posts/   # 无 --delete
+          rm -rf temp-dustinwin
+
+      # ---------- 6. 下载并解压 NewTVBox（先验证，再覆盖，不删除） ----------
+      - name: Download and extract NewTVBox（只覆盖，不删除）
+        run: |
+          curl -L -o github.zip "https://github.com/PizazzGY/NewTVBox/archive/refs/heads/main.zip" || {
+            echo "❌ 下载失败，保留原有 gitee-source"
+            rm -f github.zip
+            exit 0
+          }
+          if unzip -t github.zip >/dev/null 2>&1; then
+            unzip -q github.zip -d temp_newtvbox
+            mkdir -p gitee-source
+            rsync -a --exclude='.git' temp_newtvbox/NewTVBox-main/ gitee-source/   # 无 --delete
+            rm -rf temp_newtvbox NewTVBox-main github.zip
+          else
+            echo "⚠️ ZIP 损坏，保留原有"
+            rm -f github.zip
+          fi
+
+      # ---------- 7. 解压 gitee-source 目录下的所有 ZIP（保留旧文件） ----------
+      - name: Unzip ZIP files inside gitee-source
+        run: |
+          if [ -d "gitee-source" ]; then
+            cd gitee-source
+            for file in *.zip; do
+              [ -e "$file" ] || continue
+              unzip -o "$file"     # -o 覆盖已存在文件，但不会删除 zip 里没有的旧文件
+              # 如需删除原 zip 可取消下一行注释
+              # rm -f "$file"
+            done
+            cd ..
+          fi
+
+      # ---------- 8. 一次性提交并推送（无 --force，带重试） ----------
+      - name: Commit and push changes
+        run: |
+          git add .
+          git diff --staged --quiet || git commit -m "Sync all projects and unzip (keep deleted files)"
+          for i in {1..3}; do
+            git push origin $DEFAULT_BRANCH && break
+            echo "推送失败，等待 5 秒后重试 ($i/3)"
+            sleep 5
+          done
+
+  # ---------- 9. 清理历史工作流运行记录 ----------
+  cleanup_runs:
+    runs-on: ubuntu-latest
+    needs: sync_and_unzip
+    steps:
+      - name: Delete old runs
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          retain_days: 3
+          keep_minimum_runs: 10
