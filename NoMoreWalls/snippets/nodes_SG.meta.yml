@@ -2,8 +2,8 @@ proxies:
 - name: 新加坡|@ripaojiedian
   network: tcp
   password: d1960ba9f0f6353353994fa844cf817b
-  port: 51396
-  server: 18.166.178.12
+  port: 32434
+  server: 18.163.100.58
   skip-cert-verify: true
   sni: www.nintendogames.net
   type: trojan
@@ -11,25 +11,61 @@ proxies:
   network: tcp
   password: d1960ba9f0f6353353994fa844cf817b
   port: 51396
-  server: 95.40.107.76
+  server: 18.166.178.12
   skip-cert-verify: true
   sni: www.nintendogames.net
   type: trojan
-- name: HK_speednode_0009
+- name: 新加坡3|@ripaojiedian
   network: tcp
   password: BxceQaOe
-  port: 9149
-  server: 16.162.22.218
+  port: 45744
+  server: 16.163.150.174
   skip-cert-verify: true
   sni: t.me%252Fripaojiedian
   type: trojan
-  udp: true
-- client-fingerprint: chrome
-  name: 🇸🇬SG_1|1.7MB/s
-  network: tcp
-  password: ND91608427
+- name: 🇸🇬SG_1|4.2MB/s
+  network: ws
   port: 443
-  server: sacred-treefrog.rooster465.autos
+  server: 162.159.49.14
+  servername: b8k86.z3xq.fzi.hh.vavava.kdns.fr
   skip-cert-verify: true
-  sni: sacred-treefrog.rooster465.autos
-  type: trojan
+  tls: true
+  type: vless
+  udp: true
+  uuid: 47fcef29-ab4e-4aa6-932b-d95a18f28a4e
+  ws-opts:
+    headers:
+      Host: b8k86.z3xq.fzi.hh.vavava.kdns.fr
+    path: /?ed=2560
+- alpn:
+  - h2
+  - http/1.1
+  client-fingerprint: chrome
+  encryption: none
+  name: 🇸🇬SG_2|1.8MB/s
+  network: ws
+  packet-encoding: xudp
+  port: 2096
+  server: 104.17.70.206
+  servername: free-server.techsonic.dev
+  tls: true
+  type: vless
+  uuid: 6e59d5c5-7aa3-4c36-a4c4-e3b899525ed2
+  ws-opts:
+    headers:
+      Host: free-server.techsonic.dev
+    path: /free-server.techsonic.dev
+- client-fingerprint: chrome
+  name: 🇸🇬SG_3|1.2MB/s
+  network: tcp
+  port: '443'
+  reality-opts:
+    public-key: ZTo_XhHaaXEJnDZFZ7S8-BYBS_fbk2F2IADoHdmU7W8
+    short-id: '!!str 3cf84632f6dd14c7'
+  server: 34.126.158.226
+  servername: www.cloudflare.com
+  tls: true
+  type: vless
+  udp: true
+  uuid: 7f7031b3-cd5c-4ba6-9627-91a9cc702941
+  xudp: true
