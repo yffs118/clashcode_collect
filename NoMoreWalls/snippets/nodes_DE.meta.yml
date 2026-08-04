@@ -9,13 +9,20 @@ proxies:
   sni: api.kermanshahi.org
   tls: false
   type: hysteria2
-- name: 🇩🇪 t-me-V2RayyNGvpn 🇩🇪
-  obfs: salamander
-  obfs-password: RedmEthIS-Join-V2RayyNGvpn-oBsPaHard183hgak
-  password: DSgrpvSRAu
-  port: 443
-  server: 91.107.178.22
-  skip-cert-verify: true
-  sni: www.refersion.com
-  tls: false
-  type: hysteria2
+- client-fingerprint: qq
+  encryption: none
+  grpc-opts:
+    grpc-service-name: 5post.gate.v1
+  name: 🇩🇪DE_1|1.2MB/s
+  network: grpc
+  port: '443'
+  reality-opts:
+    public-key: V6FabatADtcX7aO9KMjGCadJC4LuQ_5nRViab-z-nFQ
+    short-id: '!!str abcd'
+  server: 95.163.232.183
+  servername: 5post-gate.x5.ru
+  tls: true
+  type: vless
+  udp: true
+  uuid: fdccfb75-edb1-4b92-88a1-4bbbae8d1673
+  xudp: true
