@@ -1,0 +1,1484 @@
+port: 7890
+socks-port: 7891
+mixed-port: 10801
+redir-port: 7892
+tproxy-port: 7893
+allow-lan: true
+bind-address: "*"
+find-process-mode: strict
+mode: rule
+secret: ""
+unified-delay: false
+tcp-concurrent: true
+geodata-mode: false
+skip-auth-prefixes:
+    - 127.0.0.1/32
+authentication: []
+lan-allowed-ips:
+    - 0.0.0.0/0
+    - ::/0
+lan-disallowed-ips: []
+geox-url:
+    geoip: "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat"
+    geosite: "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat"
+    mmdb: "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.metadb"
+geo-auto-update: true
+geo-update-interval: 24
+log-level: silent
+ipv6: false
+external-controller: 0.0.0.0:9090 # 
+external-controller-tls: 0.0.0.0:9443
+external-controller-unix: mihomo.sock
+external-controller-pipe: \\.\pipe\mihomo
+external-ui: ui
+external-ui-url: "https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip"
+external-doh-server: /dns-query
+global-client-fingerprint: chrome
+profile:
+    store-selected: false
+    store-fake-ip: true
+sniffer:
+    enable: true
+    sniff:
+        HTTP:
+            ports: [80, 8080-8880]
+            override-destination: true
+        TLS:
+            ports: [443, 8443]
+        QUIC:
+            ports: [443, 8443]
+    skip-domain:
+        - "Mijia Cloud"
+        - "+.push.apple.com"
+tun:
+    enable: true
+    stack: system
+    auto-route: true
+    auto-redirect: true
+    auto-detect-interface: true
+    dns-hijack:
+        - any:53
+        - tcp://any:53
+    device: mihomo
+    mtu: 9000
+    strict-route: false
+    gso: true
+    gso-max-size: 65536
+    udp-timeout: 300
+    iproute2-table-index: 2022
+    iproute2-rule-index: 9000
+    endpoint-independent-nat: false
+    route-exclude-address:
+        - 172.16.0.0/12
+        - fc00::/7
+dns:
+    enable: true
+    listen: 0.0.0.0:53
+    ipv6: false
+    default-nameserver: [223.5.5.5, 119.29.29.29]
+    enhanced-mode: fake-ip
+    fake-ip-range: 198.18.0.1/16
+    use-hosts: true
+    nameserver: ['https://doh.pub/dns-query', 'https://dns.alidns.com/dns-query']
+    url-test: ['https://doh.dns.sb/dns-query', 'https://dns.cloudflare.com/dns-query', 'https://dns.twnic.tw/dns-query', 'tls://8.8.4.4:853']
+    url-test-filter: {geoip: true, ipcidr: [240.0.0.0/4, 0.0.0.0/32]}
+proxy-groups:
+    - name: Proxy
+      type: select
+      interval: 300
+      url: https://gstatic.com/generate_204
+      lazy: true
+      timeout: 2000
+      max-failed-times: 3
+      proxies:
+        - "\U0001F64F 自动选择"
+        - "\U0001F4AA 手动选择"
+        - "\U0001F3A1负载均衡"
+        - "\U0001F1ED\U0001F1F0 香港节点"
+        - "\U0001F1EF\U0001F1F5 日本节点"
+        - "\U0001F1F0\U0001F1F7 韩国节点"
+        - "\U0001F1F8\U0001F1EC 新加坡节点"
+        - "\U0001F1FA\U0001F1F8 美国节点"
+        - "\U0001F1EC\U0001F1E7 英国节点"
+        - "\U0001F1EB\U0001F1F7 法国节点"
+        - "\U0001F1E9\U0001F1EA 德国节点"
+        - "\U0001F1E8\U0001F1E6 加拿大节点"
+        - "\U0001F1E6\U0001F1FA 澳大利亚节点"
+        - "\U0001F1F3\U0001F1F1 荷兰节点"
+        - "\U0001F1F7\U0001F1FA 俄罗斯节点"
+        - "\U0001F1ED\U0001F1FA 匈牙利节点"
+        - "\U0001F1FA\U0001F1E6 乌克兰节点"
+        - "\U0001F1F5\U0001F1F1 波兰节点"
+        - "\U0001F1EE\U0001F1F9 意大利节点"
+        - "\U0001F1EE\U0001F1F7 伊朗节点"
+      icon: https://cdn.jsdelivr.net/gh/mihomo-party-org/mihomo-party/resources/icon.png
+    - name: Cloudflare
+      type: select
+      interval: 300
+      url: https://gstatic.com/generate_204
+      lazy: true
+      timeout: 2000
+      max-failed-times: 3
+      proxies:
+        - Proxy
+        - DIRECT
+        - "\U0001F1ED\U0001F1F0 香港节点"
+        - "\U0001F1EF\U0001F1F5 日本节点"
+        - "\U0001F1F0\U0001F1F7 韩国节点"
+        - "\U0001F1F8\U0001F1EC 新加坡节点"
+        - "\U0001F1FA\U0001F1F8 美国节点"
+        - "\U0001F1EC\U0001F1E7 英国节点"
+        - "\U0001F1EB\U0001F1F7 法国节点"
+        - "\U0001F1E9\U0001F1EA 德国节点"
+        - "\U0001F1E8\U0001F1E6 加拿大节点"
+        - "\U0001F1E6\U0001F1FA 澳大利亚节点"
+        - "\U0001F1F3\U0001F1F1 荷兰节点"
+        - "\U0001F1F7\U0001F1FA 俄罗斯节点"
+        - "\U0001F1ED\U0001F1FA 匈牙利节点"
+        - "\U0001F1FA\U0001F1E6 乌克兰节点"
+        - "\U0001F1F5\U0001F1F1 波兰节点"
+        - "\U0001F1EE\U0001F1F9 意大利节点"
+        - "\U0001F1EE\U0001F1F7 伊朗节点"
+      icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/cloudflare.png
+    - name: Bing
+      type: select
+      interval: 300
+      url: https://gstatic.com/generate_204
+      lazy: true
+      timeout: 2000
+      max-failed-times: 3
+      proxies:
+        - DIRECT
+        - Proxy
+        - "\U0001F1ED\U0001F1F0 香港节点"
+        - "\U0001F1EF\U0001F1F5 日本节点"
+        - "\U0001F1F0\U0001F1F7 韩国节点"
+        - "\U0001F1F8\U0001F1EC 新加坡节点"
+        - "\U0001F1FA\U0001F1F8 美国节点"
+        - "\U0001F1EC\U0001F1E7 英国节点"
+        - "\U0001F1EB\U0001F1F7 法国节点"
+        - "\U0001F1E9\U0001F1EA 德国节点"
+        - "\U0001F1E8\U0001F1E6 加拿大节点"
+        - "\U0001F1E6\U0001F1FA 澳大利亚节点"
+        - "\U0001F1F3\U0001F1F1 荷兰节点"
+        - "\U0001F1F7\U0001F1FA 俄罗斯节点"
+        - "\U0001F1ED\U0001F1FA 匈牙利节点"
+        - "\U0001F1FA\U0001F1E6 乌克兰节点"
+        - "\U0001F1F5\U0001F1F1 波兰节点"
+        - "\U0001F1EE\U0001F1F9 意大利节点"
+        - "\U0001F1EE\U0001F1F7 伊朗节点"
+      icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/microsoft-bing.png
+    - name: Github
+      type: select
+      interval: 300
+      url: https://github.com
+      lazy: true
+      timeout: 2000
+      max-failed-times: 3
+      proxies:
+        - Proxy
+        - "\U0001F1ED\U0001F1F0 香港节点"
+        - "\U0001F1EF\U0001F1F5 日本节点"
+        - "\U0001F1F0\U0001F1F7 韩国节点"
+        - "\U0001F1F8\U0001F1EC 新加坡节点"
+        - "\U0001F1FA\U0001F1F8 美国节点"
+        - "\U0001F1EC\U0001F1E7 英国节点"
+        - "\U0001F1EB\U0001F1F7 法国节点"
+        - "\U0001F1E9\U0001F1EA 德国节点"
+        - "\U0001F1E8\U0001F1E6 加拿大节点"
+        - "\U0001F1E6\U0001F1FA 澳大利亚节点"
+        - "\U0001F1F3\U0001F1F1 荷兰节点"
+        - "\U0001F1F7\U0001F1FA 俄罗斯节点"
+        - "\U0001F1ED\U0001F1FA 匈牙利节点"
+        - "\U0001F1FA\U0001F1E6 乌克兰节点"
+        - "\U0001F1F5\U0001F1F1 波兰节点"
+        - "\U0001F1EE\U0001F1F9 意大利节点"
+        - "\U0001F1EE\U0001F1F7 伊朗节点"
+      icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/github.png
+    - name: OpenAI
+      type: select
+      interval: 300
+      url: https://openai.com
+      lazy: true
+      timeout: 2000
+      max-failed-times: 3
+      proxies:
+        - "\U0001F64F 自动选择"
+        - "\U0001F4AA 手动选择"
+        - "\U0001F1FA\U0001F1F8 美国节点"
+        - "\U0001F1ED\U0001F1F0 香港节点"
+        - "\U0001F1F9\U0001F1FC 台湾节点"
+        - "\U0001F1EF\U0001F1F5 日本节点"
+        - "\U0001F1F0\U0001F1F7 韩国节点"
+        - "\U0001F1F8\U0001F1EC 新加坡节点"
+        - "\U0001F1EC\U0001F1E7 英国节点"
+        - "\U0001F1EB\U0001F1F7 法国节点"
+        - "\U0001F1E9\U0001F1EA 德国节点"
+        - "\U0001F1E8\U0001F1E6 加拿大节点"
+        - "\U0001F1E6\U0001F1FA 澳大利亚节点"
+        - "\U0001F1F3\U0001F1F1 荷兰节点"
+        - "\U0001F1F7\U0001F1FA 俄罗斯节点"
+        - "\U0001F1ED\U0001F1FA 匈牙利节点"
+        - "\U0001F1FA\U0001F1E6 乌克兰节点"
+        - "\U0001F1F5\U0001F1F1 波兰节点"
+        - "\U0001F1EE\U0001F1F9 意大利节点"
+        - "\U0001F1EE\U0001F1F7 伊朗节点"
+      icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/chatgpt.png
+    - name: Netflix
+      type: select
+      interval: 300
+      url: https://netflix.com
+      lazy: true
+      timeout: 2000
+      max-failed-times: 3
+      proxies:
+        - "\U0001F64F 自动选择"
+        - "\U0001F4AA 手动选择"
+        - "\U0001F1FA\U0001F1F8 美国节点"
+        - "\U0001F1ED\U0001F1F0 香港节点"
+        - "\U0001F1F9\U0001F1FC 台湾节点"
+        - "\U0001F1EF\U0001F1F5 日本节点"
+        - "\U0001F1F0\U0001F1F7 韩国节点"
+        - "\U0001F1F8\U0001F1EC 新加坡节点"
+        - "\U0001F1EC\U0001F1E7 英国节点"
+        - "\U0001F1EB\U0001F1F7 法国节点"
+        - "\U0001F1E9\U0001F1EA 德国节点"
+        - "\U0001F1E8\U0001F1E6 加拿大节点"
+        - "\U0001F1E6\U0001F1FA 澳大利亚节点"
+        - "\U0001F1F3\U0001F1F1 荷兰节点"
+        - "\U0001F1F7\U0001F1FA 俄罗斯节点"
+        - "\U0001F1ED\U0001F1FA 匈牙利节点"
+        - "\U0001F1FA\U0001F1E6 乌克兰节点"
+        - "\U0001F1F5\U0001F1F1 波兰节点"
+        - "\U0001F1EE\U0001F1F9 意大利节点"
+        - "\U0001F1EE\U0001F1F7 伊朗节点"
+      icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/netflix.png
+    - name: Disney+
+      type: select
+      interval: 300
+      url: https://disney.com
+      lazy: true
+      timeout: 2000
+      max-failed-times: 3
+      proxies:
+        - "\U0001F64F 自动选择"
+        - "\U0001F4AA 手动选择"
+        - "\U0001F1FA\U0001F1F8 美国节点"
+        - "\U0001F1ED\U0001F1F0 香港节点"
+        - "\U0001F1F9\U0001F1FC 台湾节点"
+        - "\U0001F1EF\U0001F1F5 日本节点"
+        - "\U0001F1F0\U0001F1F7 韩国节点"
+        - "\U0001F1F8\U0001F1EC 新加坡节点"
+        - "\U0001F1EC\U0001F1E7 英国节点"
+        - "\U0001F1EB\U0001F1F7 法国节点"
+        - "\U0001F1E9\U0001F1EA 德国节点"
+        - "\U0001F1E8\U0001F1E6 加拿大节点"
+        - "\U0001F1E6\U0001F1FA 澳大利亚节点"
+        - "\U0001F1F3\U0001F1F1 荷兰节点"
+        - "\U0001F1F7\U0001F1FA 俄罗斯节点"
+        - "\U0001F1ED\U0001F1FA 匈牙利节点"
+        - "\U0001F1FA\U0001F1E6 乌克兰节点"
+        - "\U0001F1F5\U0001F1F1 波兰节点"
+        - "\U0001F1EE\U0001F1F9 意大利节点"
+        - "\U0001F1EE\U0001F1F7 伊朗节点"
+      icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/disney-plus.png
+    - name: YouTube
+      type: select
+      interval: 300
+      url: https://youtube.com
+      lazy: true
+      timeout: 2000
+      max-failed-times: 3
+      proxies:
+        - "\U0001F64F 自动选择"
+        - "\U0001F4AA 手动选择"
+        - "\U0001F1FA\U0001F1F8 美国节点"
+        - "\U0001F1ED\U0001F1F0 香港节点"
+        - "\U0001F1F9\U0001F1FC 台湾节点"
+        - "\U0001F1EF\U0001F1F5 日本节点"
+        - "\U0001F1F0\U0001F1F7 韩国节点"
+        - "\U0001F1F8\U0001F1EC 新加坡节点"
+        - "\U0001F1EC\U0001F1E7 英国节点"
+        - "\U0001F1EB\U0001F1F7 法国节点"
+        - "\U0001F1E9\U0001F1EA 德国节点"
+        - "\U0001F1E8\U0001F1E6 加拿大节点"
+        - "\U0001F1E6\U0001F1FA 澳大利亚节点"
+        - "\U0001F1F3\U0001F1F1 荷兰节点"
+        - "\U0001F1F7\U0001F1FA 俄罗斯节点"
+        - "\U0001F1ED\U0001F1FA 匈牙利节点"
+        - "\U0001F1FA\U0001F1E6 乌克兰节点"
+        - "\U0001F1F5\U0001F1F1 波兰节点"
+        - "\U0001F1EE\U0001F1F9 意大利节点"
+        - "\U0001F1EE\U0001F1F7 伊朗节点"
+      icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/youtube.png
+    - name: TikTok
+      type: select
+      proxies:
+        - Proxy
+        - "\U0001F1ED\U0001F1F0 香港节点"
+        - "\U0001F1EF\U0001F1F5 日本节点"
+        - "\U0001F1F0\U0001F1F7 韩国节点"
+        - "\U0001F1F8\U0001F1EC 新加坡节点"
+        - "\U0001F1FA\U0001F1F8 美国节点"
+        - "\U0001F1EC\U0001F1E7 英国节点"
+        - "\U0001F1EB\U0001F1F7 法国节点"
+        - "\U0001F1E9\U0001F1EA 德国节点"
+        - "\U0001F1E8\U0001F1E6 加拿大节点"
+        - "\U0001F1E6\U0001F1FA 澳大利亚节点"
+        - "\U0001F1F3\U0001F1F1 荷兰节点"
+        - "\U0001F1F7\U0001F1FA 俄罗斯节点"
+        - "\U0001F1ED\U0001F1FA 匈牙利节点"
+        - "\U0001F1FA\U0001F1E6 乌克兰节点"
+        - "\U0001F1F5\U0001F1F1 波兰节点"
+        - "\U0001F1EE\U0001F1F9 意大利节点"
+        - "\U0001F1EE\U0001F1F7 伊朗节点"
+      icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/tiktok.png
+    - name: Spotify
+      type: select
+      proxies:
+        - Proxy
+        - "\U0001F1ED\U0001F1F0 香港节点"
+        - "\U0001F1EF\U0001F1F5 日本节点"
+        - "\U0001F1F0\U0001F1F7 韩国节点"
+        - "\U0001F1F8\U0001F1EC 新加坡节点"
+        - "\U0001F1FA\U0001F1F8 美国节点"
+        - "\U0001F1EC\U0001F1E7 英国节点"
+        - "\U0001F1EB\U0001F1F7 法国节点"
+        - "\U0001F1E9\U0001F1EA 德国节点"
+        - "\U0001F1E8\U0001F1E6 加拿大节点"
+        - "\U0001F1E6\U0001F1FA 澳大利亚节点"
+        - "\U0001F1F3\U0001F1F1 荷兰节点"
+        - "\U0001F1F7\U0001F1FA 俄罗斯节点"
+        - "\U0001F1ED\U0001F1FA 匈牙利节点"
+        - "\U0001F1FA\U0001F1E6 乌克兰节点"
+        - "\U0001F1F5\U0001F1F1 波兰节点"
+        - "\U0001F1EE\U0001F1F9 意大利节点"
+        - "\U0001F1EE\U0001F1F7 伊朗节点"
+      icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/spotify.png
+    - name: Telegram
+      type: select
+      url: https://telegram.org
+      interval: 300
+      timeout: 2000
+      max-failed-times: 3
+      proxies:
+        - Proxy
+        - "\U0001F1ED\U0001F1F0 香港节点"
+        - "\U0001F1EF\U0001F1F5 日本节点"
+        - "\U0001F1F0\U0001F1F7 韩国节点"
+        - "\U0001F1F8\U0001F1EC 新加坡节点"
+        - "\U0001F1FA\U0001F1F8 美国节点"
+        - "\U0001F1EC\U0001F1E7 英国节点"
+        - "\U0001F1EB\U0001F1F7 法国节点"
+        - "\U0001F1E9\U0001F1EA 德国节点"
+        - "\U0001F1E8\U0001F1E6 加拿大节点"
+        - "\U0001F1E6\U0001F1FA 澳大利亚节点"
+        - "\U0001F1F3\U0001F1F1 荷兰节点"
+        - "\U0001F1F7\U0001F1FA 俄罗斯节点"
+        - "\U0001F1ED\U0001F1FA 匈牙利节点"
+        - "\U0001F1FA\U0001F1E6 乌克兰节点"
+        - "\U0001F1F5\U0001F1F1 波兰节点"
+        - "\U0001F1EE\U0001F1F9 意大利节点"
+        - "\U0001F1EE\U0001F1F7 伊朗节点"
+      icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/telegram.png
+    - name: Microsoft
+      type: select
+      proxies:
+        - Proxy
+        - DIRECT
+        - "\U0001F1ED\U0001F1F0 香港节点"
+        - "\U0001F1EF\U0001F1F5 日本节点"
+        - "\U0001F1F0\U0001F1F7 韩国节点"
+        - "\U0001F1F8\U0001F1EC 新加坡节点"
+        - "\U0001F1FA\U0001F1F8 美国节点"
+        - "\U0001F1EC\U0001F1E7 英国节点"
+        - "\U0001F1EB\U0001F1F7 法国节点"
+        - "\U0001F1E9\U0001F1EA 德国节点"
+        - "\U0001F1E8\U0001F1E6 加拿大节点"
+        - "\U0001F1E6\U0001F1FA 澳大利亚节点"
+        - "\U0001F1F3\U0001F1F1 荷兰节点"
+        - "\U0001F1F7\U0001F1FA 俄罗斯节点"
+        - "\U0001F1ED\U0001F1FA 匈牙利节点"
+        - "\U0001F1FA\U0001F1E6 乌克兰节点"
+        - "\U0001F1F5\U0001F1F1 波兰节点"
+        - "\U0001F1EE\U0001F1F9 意大利节点"
+        - "\U0001F1EE\U0001F1F7 伊朗节点"
+      icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/microsoft.png
+    - name: Onedrive
+      type: select
+      proxies:
+        - DIRECT
+        - Proxy
+        - "\U0001F1ED\U0001F1F0 香港节点"
+        - "\U0001F1EF\U0001F1F5 日本节点"
+        - "\U0001F1F0\U0001F1F7 韩国节点"
+        - "\U0001F1F8\U0001F1EC 新加坡节点"
+        - "\U0001F1FA\U0001F1F8 美国节点"
+        - "\U0001F1EC\U0001F1E7 英国节点"
+        - "\U0001F1EB\U0001F1F7 法国节点"
+        - "\U0001F1E9\U0001F1EA 德国节点"
+        - "\U0001F1E8\U0001F1E6 加拿大节点"
+        - "\U0001F1E6\U0001F1FA 澳大利亚节点"
+        - "\U0001F1F3\U0001F1F1 荷兰节点"
+        - "\U0001F1F7\U0001F1FA 俄罗斯节点"
+        - "\U0001F1ED\U0001F1FA 匈牙利节点"
+        - "\U0001F1FA\U0001F1E6 乌克兰节点"
+        - "\U0001F1F5\U0001F1F1 波兰节点"
+        - "\U0001F1EE\U0001F1F9 意大利节点"
+        - "\U0001F1EE\U0001F1F7 伊朗节点"
+      icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/microsoft-onedrive.png
+    - name: Apple
+      type: select
+      proxies:
+        - DIRECT
+        - Proxy
+        - "\U0001F1ED\U0001F1F0 香港节点"
+        - "\U0001F1EF\U0001F1F5 日本节点"
+        - "\U0001F1F0\U0001F1F7 韩国节点"
+        - "\U0001F1F8\U0001F1EC 新加坡节点"
+        - "\U0001F1FA\U0001F1F8 美国节点"
+        - "\U0001F1EC\U0001F1E7 英国节点"
+        - "\U0001F1EB\U0001F1F7 法国节点"
+        - "\U0001F1E9\U0001F1EA 德国节点"
+        - "\U0001F1E8\U0001F1E6 加拿大节点"
+        - "\U0001F1E6\U0001F1FA 澳大利亚节点"
+        - "\U0001F1F3\U0001F1F1 荷兰节点"
+        - "\U0001F1F7\U0001F1FA 俄罗斯节点"
+        - "\U0001F1ED\U0001F1FA 匈牙利节点"
+        - "\U0001F1FA\U0001F1E6 乌克兰节点"
+        - "\U0001F1F5\U0001F1F1 波兰节点"
+        - "\U0001F1EE\U0001F1F9 意大利节点"
+        - "\U0001F1EE\U0001F1F7 伊朗节点"
+      icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/apple.png
+    - name: Gamer
+      type: select
+      include-all: true
+      filter: "^(?=.*((?i)游戏|\U0001F3AE|(\\b(GAME)\\b)))(?!.*((?i)回国|校园)).*$"
+      proxies:
+        - DIRECT
+        - Proxy
+      icon: https://cdn.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Game.png
+    - name: GlobalMedia
+      type: select
+      proxies:
+        - Proxy
+        - DIRECT
+        - "\U0001F1ED\U0001F1F0 香港节点"
+        - "\U0001F1EF\U0001F1F5 日本节点"
+        - "\U0001F1F0\U0001F1F7 韩国节点"
+        - "\U0001F1F8\U0001F1EC 新加坡节点"
+        - "\U0001F1FA\U0001F1F8 美国节点"
+        - "\U0001F1EC\U0001F1E7 英国节点"
+        - "\U0001F1EB\U0001F1F7 法国节点"
+        - "\U0001F1E9\U0001F1EA 德国节点"
+        - "\U0001F1E8\U0001F1E6 加拿大节点"
+        - "\U0001F1E6\U0001F1FA 澳大利亚节点"
+        - "\U0001F1F3\U0001F1F1 荷兰节点"
+        - "\U0001F1F7\U0001F1FA 俄罗斯节点"
+        - "\U0001F1ED\U0001F1FA 匈牙利节点"
+        - "\U0001F1FA\U0001F1E6 乌克兰节点"
+        - "\U0001F1F5\U0001F1F1 波兰节点"
+        - "\U0001F1EE\U0001F1F9 意大利节点"
+        - "\U0001F1EE\U0001F1F7 伊朗节点"
+      icon: https://cdn.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/ForeignMedia.png
+    - name: "\U0001F4AA 手动选择"
+      type: select
+      include-all: true
+    - name: "\U0001F64F 自动选择"
+      type: url-test
+      tolerance: 100
+      interval: 60
+      lazy: true
+      url: https://gstatic.com/generate_204
+      timeout: 2000
+      max-failed-times: 3
+      include-all: true
+    - name: "\U0001F3A1负载均衡"
+      type: load-balance
+      interval: 60
+      lazy: true
+      url: https://gstatic.com/generate_204
+      disable-udp: false
+      timeout: 2000
+      max-failed-times: 3
+      strategy: sticky-sessions
+      include-all: true
+    - name: "\U0001F1ED\U0001F1F0 香港节点"
+      type: url-test
+      tolerance: 100
+      interval: 60
+      lazy: true
+      url: https://gstatic.com/generate_204
+      timeout: 2000
+      max-failed-times: 3
+      filter: "(?i)HK|香港|港"
+      include-all: true
+    - name: "\U0001F1F9\U0001F1FC 台湾节点"
+      type: url-test
+      tolerance: 100
+      interval: 60
+      lazy: true
+      url: https://gstatic.com/generate_204
+      timeout: 2000
+      max-failed-times: 3
+      filter: "(?i)TW|台湾|台"
+      include-all: true
+    - name: "\U0001F1EF\U0001F1F5 日本节点"
+      type: url-test
+      tolerance: 100
+      interval: 60
+      lazy: true
+      url: https://gstatic.com/generate_204
+      timeout: 2000
+      max-failed-times: 3
+      filter: "(?i)JP"
+      include-all: true
+    - name: "\U0001F1F0\U0001F1F7 韩国节点"
+      type: url-test
+      tolerance: 100
+      interval: 60
+      lazy: true
+      url: https://gstatic.com/generate_204
+      timeout: 2000
+      max-failed-times: 3
+      filter: "(?i)KR|韩国|韩"
+      include-all: true
+    - name: "\U0001F1F8\U0001F1EC 新加坡节点"
+      type: url-test
+      tolerance: 100
+      interval: 60
+      lazy: true
+      url: https://gstatic.com/generate_204
+      timeout: 2000
+      max-failed-times: 3
+      filter: "(?i)SG|新加坡|狮城"
+      include-all: true
+    - name: "\U0001F1FA\U0001F1F8 美国节点"
+      type: url-test
+      tolerance: 100
+      interval: 60
+      lazy: true
+      url: https://gstatic.com/generate_204
+      timeout: 2000
+      max-failed-times: 3
+      filter: "(?i)US|美国|美"
+      include-all: true
+    - name: "\U0001F1EC\U0001F1E7 英国节点"
+      type: url-test
+      tolerance: 100
+      interval: 60
+      lazy: true
+      url: https://gstatic.com/generate_204
+      timeout: 2000
+      max-failed-times: 3
+      filter: "(?i)UK|GB|英国|英"
+      include-all: true
+    - name: "\U0001F1EB\U0001F1F7 法国节点"
+      type: url-test
+      tolerance: 100
+      interval: 60
+      lazy: true
+      url: https://gstatic.com/generate_204
+      timeout: 2000
+      max-failed-times: 3
+      filter: "(?i)FR|法国|法"
+      include-all: true
+    - name: "\U0001F1E9\U0001F1EA 德国节点"
+      type: url-test
+      tolerance: 100
+      interval: 60
+      lazy: true
+      url: https://gstatic.com/generate_204
+      timeout: 2000
+      max-failed-times: 3
+      filter: "(?i)DE|德国|德"
+      include-all: true
+    - name: "\U0001F1E8\U0001F1E6 加拿大节点"
+      type: url-test
+      tolerance: 100
+      interval: 60
+      lazy: true
+      url: https://gstatic.com/generate_204
+      timeout: 2000
+      max-failed-times: 3
+      filter: "(?i)CA|加拿大"
+      include-all: true
+    - name: "\U0001F1E6\U0001F1FA 澳大利亚节点"
+      type: url-test
+      tolerance: 100
+      interval: 60
+      lazy: true
+      url: https://gstatic.com/generate_204
+      timeout: 2000
+      max-failed-times: 3
+      filter: "(?i)AU|澳大利亚|澳洲"
+      include-all: true
+    - name: "\U0001F1F3\U0001F1F1 荷兰节点"
+      type: url-test
+      tolerance: 100
+      interval: 60
+      lazy: true
+      url: https://gstatic.com/generate_204
+      timeout: 2000
+      max-failed-times: 3
+      filter: "(?i)NL|荷兰"
+      include-all: true
+    - name: "\U0001F1F7\U0001F1FA 俄罗斯节点"
+      type: url-test
+      tolerance: 100
+      interval: 60
+      lazy: true
+      url: https://gstatic.com/generate_204
+      timeout: 2000
+      max-failed-times: 3
+      filter: "(?i)RU|俄罗斯|俄"
+      include-all: true
+    - name: "\U0001F1ED\U0001F1FA 匈牙利节点"
+      type: url-test
+      tolerance: 100
+      interval: 60
+      lazy: true
+      url: https://gstatic.com/generate_204
+      timeout: 2000
+      max-failed-times: 3
+      filter: "(?i)HU|匈牙利"
+      include-all: true
+    - name: "\U0001F1FA\U0001F1E6 乌克兰节点"
+      type: url-test
+      tolerance: 100
+      interval: 60
+      lazy: true
+      url: https://gstatic.com/generate_204
+      timeout: 2000
+      max-failed-times: 3
+      filter: "(?i)UA|乌克兰"
+      include-all: true
+    - name: "\U0001F1F5\U0001F1F1 波兰节点"
+      type: url-test
+      tolerance: 100
+      interval: 60
+      lazy: true
+      url: https://gstatic.com/generate_204
+      timeout: 2000
+      max-failed-times: 3
+      filter: "(?i)PL|波兰"
+      include-all: true
+    - name: "\U0001F1EE\U0001F1F9 意大利节点"
+      type: url-test
+      tolerance: 100
+      interval: 60
+      lazy: true
+      url: https://gstatic.com/generate_204
+      timeout: 2000
+      max-failed-times: 3
+      filter: "(?i)IT|意大利"
+      include-all: true
+    - name: "\U0001F1EE\U0001F1F7 伊朗节点"
+      type: url-test
+      tolerance: 100
+      interval: 60
+      lazy: true
+      url: https://gstatic.com/generate_204
+      timeout: 2000
+      max-failed-times: 3
+      filter: "(?i)IR|伊朗"
+      include-all: true
+
+rule-providers:
+    GlobalMedia:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GlobalMedia/GlobalMedia_Classical.yaml
+        path: ./RuleSet/GlobalMedia.yaml
+    ChinaMedia:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/ChinaMedia/ChinaMedia.yaml
+        path: ./RuleSet/ChinaMedia.yaml
+    Netflix:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Netflix/Netflix_Classical_No_Resolve.yaml
+        path: ./RuleSet/Netflix.yaml
+    Disney+:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Disney/Disney_No_Resolve.yaml
+        path: ./RuleSet/Disney+.yaml
+    YouTube:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/YouTube/YouTube_No_Resolve.yaml
+        path: ./RuleSet/YouTube.yaml
+    Apple:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Apple/Apple_Classical_No_Resolve.yaml
+        path: ./RuleSet/Apple.yaml
+    Microsoft:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Microsoft/Microsoft_No_Resolve.yaml
+        path: ./RuleSet/Microsoft.yaml
+    Nintendo:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Nintendo/Nintendo.yaml
+        path: ./RuleSet/Nintendo.yaml
+    PlayStation:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/PlayStation/PlayStation.yaml
+        path: ./RuleSet/PlayStation.yaml
+    Epic:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Epic/Epic.yaml
+        path: ./RuleSet/Epic.yaml
+    Xbox:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Xbox/Xbox.yaml
+        path: ./RuleSet/Xbox.yaml
+    TikTok:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/TikTok/TikTok_No_Resolve.yaml
+        path: ./RuleSet/TikTok.yaml
+    Spotify:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Spotify/Spotify.yaml
+        path: ./RuleSet/Spotify.yaml
+    OpenAI:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/OpenAI/OpenAI_No_Resolve.yaml
+        path: ./RuleSet/OpenAI.yaml
+    Proxy:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Proxy/Proxy_Classical_No_Resolve.yaml
+        path: ./RuleSet/Proxy.yaml
+    China:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/ChinaMax/ChinaMax_Classical.yaml
+        path: ./RuleSet/China.yaml
+    Tencent:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Tencent/Tencent.yaml
+        path: ./RuleSet/Tencent.yaml
+    LAN:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Lan/Lan.yaml
+        path: ./RuleSet/LAN.yaml
+    Cloudflare:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Cloudflare/Cloudflare.yaml
+        path: ./RuleSet/Cloudflare.yaml
+    Onedrive:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/OneDrive/OneDrive.yaml
+        path: ./RuleSet/Onedrive.yaml
+    Bing:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Bing/Bing.yaml
+        path: ./RuleSet/Bing.yaml
+    Github:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GitHub/GitHub.yaml
+        path: ./RuleSet/Github.yaml
+    Telegram:
+        type: http
+        behavior: classical
+        interval: 86400
+        format: yaml
+        proxy: DIRECT
+        url: https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Telegram/Telegram.yaml
+        path: ./RuleSet/Telegram.yaml
+rules:
+    - RULE-SET,ChinaMedia,DIRECT
+    - RULE-SET,China,DIRECT
+    - RULE-SET,LAN,DIRECT
+    - GEOIP,CN,DIRECT
+    - RULE-SET,ChinaMedia,DIRECT
+    - RULE-SET,China,DIRECT
+    - RULE-SET,LAN,DIRECT
+    - GEOIP,CN,DIRECT
+    - RULE-SET,OpenAI,OpenAI
+    - RULE-SET,Cloudflare,Cloudflare
+    - RULE-SET,Github,Github
+    - RULE-SET,Onedrive,Onedrive
+    - RULE-SET,Bing,Bing
+    - RULE-SET,Apple,Apple
+    - RULE-SET,Spotify,Spotify
+    - RULE-SET,TikTok,TikTok
+    - RULE-SET,Netflix,Netflix
+    - RULE-SET,Disney+,Disney+
+    - RULE-SET,YouTube,YouTube
+    - RULE-SET,Telegram,Telegram
+    - RULE-SET,Nintendo,Gamer
+    - RULE-SET,PlayStation,Gamer
+    - RULE-SET,Epic,Gamer
+    - RULE-SET,Xbox,Gamer
+    - RULE-SET,Microsoft,Microsoft
+    - RULE-SET,GlobalMedia,GlobalMedia
+    - RULE-SET,Proxy,Proxy
+    - MATCH,Proxy
+
+proxies:
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇯🇵 JP 001 | ⬇️ 473KB/s","network":"tcp","packet-encoding":"xudp","port":40724,"reality-opts":{"public-key":"k7iIWZPJ27YpA5ilhmAiRQP1P6fNWzQIIJNTYCmV6xw","short-id":"0d17feea"},"server":"evacuee.papstore.xyz","servername":"www.e-japannavi.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"e7d317bd-9124-4eb0-ae76-4d3b8dc54e92"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇭🇰 HK 002 | ⬇️ 13MB/s","network":"tcp","packet-encoding":"xudp","port":29545,"reality-opts":{"public-key":"FGDyizfv3NMbMAUExJGHZ4Pqkq9794Zg_JWfufkXnhI","short-id":"722f0f29c8"},"server":"blunt.papapple.xyz","servername":"academy.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"e7d317bd-9124-4eb0-ae76-4d3b8dc54e92"}
+ - {"client-fingerprint":"chrome","encryption":"none","name":"🇰🇷 KR 003 | ⬇️ 17MB/s","network":"ws","packet-encoding":"xudp","port":2087,"server":"172.64.53.194","servername":"faxf32gkfzoxqv.fx6hsv0.ccwu.cc","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"77777777-8a3e-6666-b6d1-a9c5f0e8b3a2","ws-opts":{"early-data-header-name":"Sec-WebSocket-Protocol","headers":{"Host":"faxf32gkfzoxqv.fx6hsv0.ccwu.cc"},"max-early-data":2560,"path":"/"}}
+ - {"client-fingerprint":"chrome","encryption":"none","flow":"","grpc-opts":{"grpc-service-name":"update"},"name":"🇭🇰 HK 004 | ⬇️ 11MB/s","network":"grpc","packet-encoding":"xudp","port":10127,"reality-opts":{"public-key":"wOu-BMrXvk9KX23JZrlpUlF4SMjDcejm0vNECdhy5xE","short-id":"686c0ef0"},"server":"hk2-r.link-t7.com","servername":"s0.awsstatic.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"57A71E7F-E6B5-42BF-A4A6-47ECCBE7F50C"}
+ - {"client-fingerprint":"chrome","name":"🇺🇸 US 005 | ⬇️ 127KB/s","network":"tcp","packet-encoding":"","port":47588,"reality-opts":{"public-key":"ViI3P61PX_g1Qw5isp6C1ZaGqKQO471V9cCEJwHFpE4","short-id":"8b2730e4eb1313"},"server":"179.255.148.66","servername":"yellowpages.amazon.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"14be84e2-8b22-42c0-a1ba-3535fc8e9257"}
+ - {"client-fingerprint":"chrome","name":"🇺🇸 US 006 | ⬇️ 201KB/s","network":"tcp","packet-encoding":"","port":47588,"reality-opts":{"public-key":"ViI3P61PX_g1Qw5isp6C1ZaGqKQO471V9cCEJwHFpE4","short-id":"8b2730e4eb1313"},"server":"179.255.148.66","servername":"yellowpages.amazon.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"14be84e2-8b22-42c0-a1ba-3535fc8e9257"}
+ - {"name":"🇳🇱 NL 007 | ⬇️ 604KB/s","password":"","port":1080,"server":"5.255.117.127","tls":false,"type":"socks5","username":""}
+ - {"name":"🇯🇵 JP 008 | ⬇️ 1MB/s","password":"6c077487-06af-4fb1-9e46-d485d98f0a31","port":52454,"server":"45.88.43.116","skip-cert-verify":true,"sni":"www.bing.com","tfo":false,"type":"hysteria2"}
+ - {"name":"🇳🇱 NL 009 | ⬇️ 4MB/s","password":"gf1:gfhysteria2024","port":443,"server":"5.129.235.85","skip-cert-verify":true,"sni":"www.linux.com","tfo":false,"type":"hysteria2"}
+ - {"cipher":"aes-256-gcm","name":"🇷🇺 RU 010 | ⬇️ 16KB/s","password":"bdb313adf74c2ede","port":20916,"server":"195.133.5.207","type":"ss"}
+ - {"name":"🇨🇴 CO 011 | ⬇️ 44KB/s","network":"tcp","port":62145,"server":"149.130.184.51","tls":false,"type":"vless","udp":true,"uuid":"8fb65472-5957-4f64-ba2d-b5812b2f155a"}
+ - {"name":"🇨🇴 CO 012 | ⬇️ 541KB/s","network":"tcp","packet-encoding":"xudp","port":62145,"server":"149.130.186.27","skip-cert-verify":false,"type":"vless","udp":true,"uuid":"8fb65472-5957-4f64-ba2d-b5812b2f155a"}
+ - {"cipher":"2022-blake3-aes-128-gcm","name":"🇰🇷 KR 013 | ⬇️ 17MB/s","password":"Y2FkNzhhZWQ0MzA1NzlhZA==:YmU0ZDQzODMtYWFhZi00Yg==","port":31304,"server":"sg.csfcpun8nb61wyygrclw.cdn000.com","skip-cert-verify":false,"type":"ss","udp":false}
+ - {"alpn":["h2"],"client-fingerprint":"firefox","name":"🇩🇪 DE 014 | ⬇️ 34KB/s","network":"tcp","packet-encoding":"xudp","port":443,"server":"217.60.193.1","servername":"ddc-akn.astralweb.tech","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"5c192fd7-ef98-4112-a20c-129108fcd7e9"}
+ - {"name":"🇵🇹 PT 015 | ⬇️ 123KB/s","network":"tcp","port":63443,"server":"93.119.168.26","type":"vless","uuid":"555a098f-06db-427c-a535-4ba284046dbf"}
+ - {"name":"🇸🇬 SG 016 | ⬇️ 278KB/s","network":"tcp","password":"55354c2b8ee339571bd657a9bb9858cc","port":40783,"server":"106.75.132.91","skip-cert-verify":true,"type":"trojan"}
+ - {"auth":"6c077487-06af-4fb1-9e46-d485d98f0a31","name":"🇯🇵 JP 017 | ⬇️ 5MB/s","password":"6c077487-06af-4fb1-9e46-d485d98f0a31","port":52454,"server":"45.88.43.116","skip-cert-verify":true,"sni":"www.bing.com","type":"hysteria2"}
+ - {"client-fingerprint":"chrome","name":"🇺🇸 US 018 | ⬇️ 400KB/s","network":"tcp","port":47588,"reality-opts":{"public-key":"ViI3P61PX_g1Qw5isp6C1ZaGqKQO471V9cCEJwHFpE4","short-id":"8b2730e4eb1313"},"server":"179.255.148.66","servername":"yellowpages.amazon.com","tls":true,"type":"vless","udp":true,"uuid":"14be84e2-8b22-42c0-a1ba-3535fc8e9257"}
+ - {"client-fingerprint":"chrome","grpc-opts":{"grpc-mode":"gun","grpc-service-name":"update"},"name":"🇭🇰 HK 019 | ⬇️ 8MB/s","network":"grpc","packet-encoding":"xudp","port":10126,"reality-opts":{"public-key":"wOu-BMrXvk9KX23JZrlpUlF4SMjDcejm0vNECdhy5xE","short-id":"686c0ef0"},"server":"hk1-r.link-t7.com","servername":"s0.awsstatic.com","tls":true,"type":"vless","udp":true,"uuid":"57A71E7F-E6B5-42BF-A4A6-47ECCBE7F50C"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 020 | ⬇️ 19KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇨🇦 CA 021 | ⬇️ 12KB/s","network":"tcp","packet-encoding":"xudp","port":5151,"reality-opts":{"public-key":"T3vWH0zPUrOsgdK7cvEEnMbS3LIJDxQ17_L_GhmZJ0E","short-id":"69b851"},"server":"185.206.170.69","servername":"www.yahoo.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"26c0589f-79e5-4789-8ff7-914f2e26e8e5"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 022 | ⬇️ 54KB/s","network":"tcp","port":993,"reality-opts":{"public-key":"Nnpwm8dqFl9dlMJmg0M9G11vmgCKzNagFTn4tH4sWy4"},"server":"88.218.44.4","servername":"swcdn.apple.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 023 | ⬇️ 5KB/s","network":"tcp","packet-encoding":"","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"name":"🇸🇬 SG 024 | ⬇️ 194KB/s","network":"tcp","password":"55354c2b8ee339571bd657a9bb9858cc","port":40783,"server":"106.75.132.91","skip-cert-verify":true,"type":"trojan"}
+ - {"name":"🇰🇷 KR 025 | ⬇️ 32KB/s","password":"","port":1090,"server":"121.169.46.116","type":"socks5","username":"Og%3D%3D"}
+ - {"client-fingerprint":"firefox","encryption":"none","flow":"xtls-rprx-vision","name":"🇳🇱 NL 026 | ⬇️ 465KB/s","network":"tcp","packet-encoding":"xudp","port":443,"reality-opts":{"public-key":"mza5Hn1aolSz65qu-UwvBP3oesxMe25r11o4nxvikF0","short-id":"64c1fe36c7846400"},"server":"185.130.226.64","servername":"anyfile2file.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"631ee34f-4faf-4ad7-b49d-e6f50403cf0e"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇲🇾 MY 027 | ⬇️ 11KB/s","network":"tcp","packet-encoding":"xudp","port":34659,"reality-opts":{"public-key":"s9y5-3ot84xakr-4-Zzoto-dfvNGTRferPIk4zGFtns","short-id":"76bf029145fbaf84"},"server":"dama.papstore.xyz","servername":"www.suny.edu","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"e7d317bd-9124-4eb0-ae76-4d3b8dc54e92"}
+ - {"name":"🇨🇴 CO 028 | ⬇️ 1MB/s","network":"tcp","port":62145,"server":"149.130.185.31","tls":false,"type":"vless","udp":true,"uuid":"8fb65472-5957-4f64-ba2d-b5812b2f155a"}
+ - {"encryption":"none","http-opts":{"headers":{"Host":["sosk.sorix-home.ir"]},"path":["/"]},"name":"🇷🇴 RO 029 | ⬇️ 10KB/s","network":"http","packet-encoding":"xudp","port":60231,"server":"sosk.sorix-home.ir","skip-cert-verify":false,"type":"vless","udp":true,"uuid":"4d7d1add-0a51-4887-b10a-07c68df24f7e"}
+ - {"name":"🇫🇷 FR 030 | ⬇️ 15KB/s","port":1088,"server":"51.178.49.241","type":"socks5"}
+ - {"name":"🇳🇱 NL 031 | ⬇️ 2MB/s","port":1080,"server":"5.255.117.127","type":"socks5"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 032 | ⬇️ 41KB/s","network":"tcp","packet-encoding":"xudp","port":23253,"server":"los.chihirokk.online","servername":"los.chihirokk.online","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"0c946396-6336-40c3-a161-fcb6bec776ce"}
+ - {"encryption":"none","name":"🇳🇱 NL 033 | ⬇️ 12KB/s","network":"ws","packet-encoding":"xudp","port":11382,"server":"176.65.151.212","skip-cert-verify":false,"tls":false,"type":"vless","udp":true,"uuid":"e51ba2a3-a79f-461d-b515-0ef2d573a8a2","ws-opts":{"path":"/nasf8s3et6"}}
+ - {"name":"🇳🇱 NL 034 | ⬇️ 5MB/s","obfs-password":"","password":"gf1:gfhysteria2024","port":443,"server":"5.129.235.85","skip-cert-verify":true,"sni":"www.linux.com","tfo":false,"type":"hysteria2"}
+ - {"name":"🇰🇷 KR 035 | ⬇️ 52KB/s","password":"","port":1090,"server":"121.169.46.116","type":"socks5","username":"Og%3D%3D"}
+ - {"name":"🇨🇴 CO 036 | ⬇️ 117KB/s","network":"tcp","port":62145,"server":"157.137.221.166","tls":false,"type":"vless","udp":true,"uuid":"8fb65472-5957-4f64-ba2d-b5812b2f155a"}
+ - {"client-fingerprint":"firefox","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 037 | ⬇️ 96KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"e6d41d6f-d58a-7650-bba4-d7f0dde3ba4d"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 038 | ⬇️ 25KB/s","network":"tcp","packet-encoding":"","port":993,"reality-opts":{"public-key":"Nnpwm8dqFl9dlMJmg0M9G11vmgCKzNagFTn4tH4sWy4"},"server":"88.218.44.4","servername":"swcdn.apple.com","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"encryption":"none","http-opts":{"headers":{"Host":["sosk.sorix-home.ir"]},"path":["/"]},"name":"🇷🇴 RO 039 | ⬇️ 13KB/s","network":"http","packet-encoding":"xudp","port":60231,"server":"sosk.sorix-home.ir","skip-cert-verify":false,"tls":false,"type":"vless","udp":true,"uuid":"4d7d1add-0a51-4887-b10a-07c68df24f7e"}
+ - {"name":"🇨🇴 CO 040 | ⬇️ 206KB/s","network":"tcp","packet-encoding":"","port":62145,"server":"157.137.221.166","skip-cert-verify":false,"tls":false,"type":"vless","udp":true,"uuid":"8fb65472-5957-4f64-ba2d-b5812b2f155a"}
+ - {"name":"🇨🇴 CO 041 | ⬇️ 756KB/s","network":"tcp","port":62145,"server":"149.130.166.237","tls":false,"type":"vless","udp":true,"uuid":"8fb65472-5957-4f64-ba2d-b5812b2f155a"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇭🇰 HK 042 | ⬇️ 13MB/s","network":"tcp","packet-encoding":"xudp","port":41099,"reality-opts":{"public-key":"J6AH-cR4oAg8Nzc88lp8EIKnfBlQYuknmANebmM-qng","short-id":"0f7921df8d6378"},"server":"saggy.papapple.xyz","servername":"academy.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"e7d317bd-9124-4eb0-ae76-4d3b8dc54e92"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 043 | ⬇️ 10MB/s","network":"tcp","packet-encoding":"xudp","port":48329,"reality-opts":{"public-key":"28EgCfjWBinJffd_K8pUnvO_YDPygSfLAXC7tBKWcms","short-id":"6e5130"},"server":"autochi.papstore.xyz","servername":"s0.awsstatic.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"e7d317bd-9124-4eb0-ae76-4d3b8dc54e92"}
+ - {"name":"🇳🇱 NL 044 | ⬇️ 21KB/s","password":"Private","port":1080,"server":"85.17.179.81","type":"socks5","username":"M_YOU_D"}
+ - {"name":"🇩🇪 DE 045 | ⬇️ 1MB/s","password":"9d3356a0-c07e-43cc-b30e-450bd50521b8","port":2056,"server":"flkf3.mangshe.xyz","skip-cert-verify":true,"sni":"flkf3.mangshe.xyz","type":"hysteria2"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 046 | ⬇️ 27KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"Nnpwm8dqFl9dlMJmg0M9G11vmgCKzNagFTn4tH4sWy4"},"server":"88.218.44.4","servername":"swcdn.apple.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"firefox","flow":"xtls-rprx-vision","name":"🇨🇦 CA 047 | ⬇️ 869KB/s","network":"tcp","packet-encoding":"xudp","port":48905,"reality-opts":{"public-key":"XIubADu7punjUa2oUfHj2vTmUzUJXN_xDrGsmf_LslY"},"server":"148.113.180.51","servername":"www.radeon.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"c9cbfe43-4087-4069-8bca-225f9a26a94f"}
+ - {"client-fingerprint":"firefox","name":"🇩🇪 DE 048 | ⬇️ 49KB/s","network":"tcp","packet-encoding":"","port":443,"server":"217.60.193.1","servername":"ddc-akn.astralweb.tech","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"5c192fd7-ef98-4112-a20c-129108fcd7e9"}
+ - {"name":"🇵🇹 PT 049 | ⬇️ 39KB/s","network":"tcp","packet-encoding":"","port":63443,"server":"93.119.168.26","skip-cert-verify":false,"tls":false,"type":"vless","udp":true,"uuid":"555a098f-06db-427c-a535-4ba284046dbf"}
+ - {"name":"🇺🇸 US 050 | ⬇️ 92KB/s","password":"","port":44499,"server":"45.61.188.134","type":"socks5","username":""}
+ - {"name":"🇵🇹 PT 051 | ⬇️ 57KB/s","network":"tcp","packet-encoding":"","port":63443,"server":"93.119.168.26","skip-cert-verify":false,"tls":false,"type":"vless","udp":true,"uuid":"555a098f-06db-427c-a535-4ba284046dbf"}
+ - {"alpn":["h3"],"client-fingerprint":"chrome","encryption":"none","name":"🇩🇪 DE 052 | ⬇️ 28KB/s","network":"xhttp","packet-encoding":"xudp","port":443,"server":"199.232.239.244","servername":"accounts.fastly.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"3e37ef76-835d-4ad2-a1d3-414ef90532bf","xhttp-opts":{"host":"ovd13.global.ssl.fastly.net","mode":"packet-up","path":"/"}}
+ - {"client-fingerprint":"chrome","encryption":"none","flow":"xtls-rprx-vision","name":"🇺🇸 US 053 | ⬇️ 25KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"Nnpwm8dqFl9dlMJmg0M9G11vmgCKzNagFTn4tH4sWy4"},"server":"88.218.44.4","servername":"swcdn.apple.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","encryption":"none","flow":"xtls-rprx-vision","name":"🇺🇸 US 054 | ⬇️ 36KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 055 | ⬇️ 48KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"name":"🇰🇷 KR 056 | ⬇️ 47KB/s","password":"admin","port":5555,"server":"158.180.91.51","type":"socks5","username":"admin"}
+ - {"name":"🇳🇱 NL 057 | ⬇️ 2MB/s","obfs-password":"","password":"gf1:gfhysteria2024","port":443,"server":"5.129.235.85","skip-cert-verify":true,"sni":"www.linux.com","tfo":false,"type":"hysteria2"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 058 | ⬇️ 39KB/s","network":"tcp","port":23253,"server":"los.chihirokk.online","servername":"los.chihirokk.online","tls":true,"type":"vless","uuid":"0c946396-6336-40c3-a161-fcb6bec776ce"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 059 | ⬇️ 38KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"delay":744,"name":"🇰🇷 KR 060 | ⬇️ 23KB/s","port":1090,"server":"121.169.46.116","skip-cert-verify":true,"type":"socks5","udp":true,"username":"T2clM0QlM0Q6"}
+ - {"name":"🇭🇰 HK 061 | ⬇️ 30KB/s","port":1080,"server":"124.156.185.140","type":"socks5"}
+ - {"cipher":"aes-256-gcm","name":"🇷🇺 RU 062 | ⬇️ 27KB/s","password":"bdb313adf74c2ede","port":20916,"server":"195.133.5.207","type":"ss"}
+ - {"client-fingerprint":"chrome","name":"🇺🇸 US 063 | ⬇️ 2MB/s","network":"tcp","port":47588,"reality-opts":{"public-key":"ViI3P61PX_g1Qw5isp6C1ZaGqKQO471V9cCEJwHFpE4","short-id":"8b2730e4eb1313"},"server":"179.255.148.66","servername":"yellowpages.amazon.com","tls":true,"type":"vless","uuid":"14be84e2-8b22-42c0-a1ba-3535fc8e9257"}
+ - {"name":"🇳🇱 NL 064 | ⬇️ 16KB/s","password":"Private","port":1080,"server":"85.17.179.81","type":"socks5","username":"M_YOU_D"}
+ - {"auth":"gf1:gfhysteria2024","name":"🇳🇱 NL 065 | ⬇️ 4MB/s","password":"gf1:gfhysteria2024","port":443,"server":"5.129.235.85","skip-cert-verify":true,"sni":"www.linux.com","type":"hysteria2"}
+ - {"client-fingerprint":"chrome","name":"🇺🇸 US 066 | ⬇️ 43KB/s","network":"tcp","packet-encoding":"","port":47588,"reality-opts":{"public-key":"ViI3P61PX_g1Qw5isp6C1ZaGqKQO471V9cCEJwHFpE4","short-id":"8b2730e4eb1313"},"server":"179.255.148.66","servername":"yellowpages.amazon.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"14be84e2-8b22-42c0-a1ba-3535fc8e9257"}
+ - {"client-fingerprint":"firefox","flow":"xtls-rprx-vision","name":"🇳🇱 NL 067 | ⬇️ 1MB/s","network":"tcp","packet-encoding":"xudp","port":443,"reality-opts":{"public-key":"mza5Hn1aolSz65qu-UwvBP3oesxMe25r11o4nxvikF0","short-id":"64c1fe36c7846400"},"server":"185.130.226.64","servername":"anyfile2file.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"631ee34f-4faf-4ad7-b49d-e6f50403cf0e"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 068 | ⬇️ 114KB/s","network":"tcp","port":22264,"reality-opts":{"public-key":"zVts3v2fSpuI92D5vyC8sZBplE_kPmPVLk0ihCoLYTE","short-id":"6ba85179e30d4fc2"},"server":"156.238.230.3","servername":"academy.nvidia.com","tls":true,"type":"vless","udp":true,"uuid":"d71ce631-d4e6-4385-98a8-aa39473487d0"}
+ - {"alpn":["h2"],"client-fingerprint":"firefox","encryption":"none","name":"🇩🇪 DE 069 | ⬇️ 41KB/s","network":"raw","packet-encoding":"xudp","port":443,"server":"217.60.193.1","servername":"ddc-akn.astralweb.tech","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"5c192fd7-ef98-4112-a20c-129108fcd7e9"}
+ - {"client-fingerprint":"chrome","encryption":"none","name":"🇺🇸 US 070 | ⬇️ 11KB/s","network":"xhttp","packet-encoding":"xudp","port":443,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4","xhttp-opts":{"mode":"auto","path":"/"}}
+ - {"client-fingerprint":"firefox","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 071 | ⬇️ 25KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"e6d41d6f-d58a-7650-bba4-d7f0dde3ba4d"}
+ - {"auth":"18cf8030-1ceb-4b7d-8c0c-c036413c144e","name":"🇸🇬 SG 072 | ⬇️ 3MB/s","password":"18cf8030-1ceb-4b7d-8c0c-c036413c144e","port":1935,"server":"sg1.xiaoliyu.cyou","skip-cert-verify":true,"sni":"sg1.xiaoliyu.cyou","type":"hysteria2"}
+ - {"name":"🇳🇱 NL 073 | ⬇️ 19KB/s","password":"Private","port":1080,"server":"85.17.179.81","type":"socks5","username":"M_YOU_D"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 074 | ⬇️ 36KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 075 | ⬇️ 18KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"firefox","grpc-opts":{"grpc-mode":"gun","grpc-service-name":"TunService"},"name":"🇺🇸 US 076 | ⬇️ 52KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","tls":true,"type":"vless","udp":true,"uuid":"e6d41d6f-d58a-7650-bba4-d7f0dde3ba4d"}
+ - {"name":"🇺🇸 US 077 | ⬇️ 223KB/s","network":"ws","packet-encoding":"xudp","port":2095,"server":"104.17.101.139","skip-cert-verify":false,"tls":false,"type":"vless","udp":true,"uuid":"86c50e3a-5b87-49dd-bd20-03c7f2735e40","ws-opts":{"headers":{"Host":"fangbinxingnmsl.pusytroller.gq"},"path":"/"}}
+ - {"name":"🇹🇼 TW 078 | ⬇️ 1MB/s","network":"tcp","password":"55354c2b8ee339571bd657a9bb9858cc","port":39221,"server":"speed-01.aliyun-web-tracker.cn","skip-cert-verify":true,"sni":"speed-01.aliyun-web-tracker.cn","type":"trojan","udp":true}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 079 | ⬇️ 2MB/s","network":"tcp","port":993,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"firefox","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 080 | ⬇️ 47KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ","short-id":""},"server":"88.218.44.4","servername":"download.nvidia.com","tls":true,"type":"vless","udp":true,"uuid":"e6d41d6f-d58a-7650-bba4-d7f0dde3ba4d","xudp":true}
+ - {"client-fingerprint":"chrome","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 081 | ⬇️ 33KB/s","network":"grpc","port":8443,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8","short-id":""},"server":"88.218.44.4","servername":"dl.google.com","tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4","xudp":true}
+ - {"client-fingerprint":"firefox","flow":"xtls-rprx-vision","name":"🇳🇱 NL 082 | ⬇️ 1MB/s","network":"tcp","packet-encoding":"xudp","port":443,"reality-opts":{"public-key":"mza5Hn1aolSz65qu-UwvBP3oesxMe25r11o4nxvikF0","short-id":"64c1fe36c7846400"},"server":"185.130.226.64","servername":"anyfile2file.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"631ee34f-4faf-4ad7-b49d-e6f50403cf0e"}
+ - {"client-fingerprint":"firefox","name":"🇩🇪 DE 083 | ⬇️ 84KB/s","network":"tcp","packet-encoding":"xudp","port":443,"server":"217.60.193.1","servername":"ddc-akn.astralweb.tech","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"5c192fd7-ef98-4112-a20c-129108fcd7e9"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 084 | ⬇️ 33KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"Nnpwm8dqFl9dlMJmg0M9G11vmgCKzNagFTn4tH4sWy4"},"server":"88.218.44.4","servername":"swcdn.apple.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"auth":"9d3356a0-c07e-43cc-b30e-450bd50521b8","name":"🇩🇪 DE 085 | ⬇️ 2MB/s","password":"9d3356a0-c07e-43cc-b30e-450bd50521b8","port":2056,"server":"flkf3.mangshe.xyz","skip-cert-verify":true,"sni":"flkf3.mangshe.xyz","type":"hysteria2"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 086 | ⬇️ 22KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"name":"🇳🇱 NL 087 | ⬇️ 18KB/s","password":"Private","port":1080,"server":"85.17.179.81","type":"socks5","username":"M_YOU_D"}
+ - {"client-fingerprint":"firefox","name":"🇩🇪 DE 088 | ⬇️ 47KB/s","network":"tcp","packet-encoding":"xudp","port":443,"server":"217.60.193.1","servername":"ddc-akn.astralweb.tech","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"5c192fd7-ef98-4112-a20c-129108fcd7e9"}
+ - {"client-fingerprint":"chrome","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 089 | ⬇️ 32KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","grpc-opts":{"grpc-mode":"gun","grpc-service-name":"TunService"},"name":"🇫🇮 FI 090 | ⬇️ 81KB/s","network":"grpc","port":8443,"reality-opts":{"public-key":"D2SXHZRRYM0WcFChGWd57XB-U73aIsGfMpe2-Gq5XSs"},"server":"170.168.97.3","servername":"download.nvidia.com","tls":true,"type":"vless","udp":true,"uuid":"5e243126-4a2a-84b6-782a-73b14797fb5f"}
+ - {"client-fingerprint":"chrome","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 091 | ⬇️ 23KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 092 | ⬇️ 33KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 093 | ⬇️ 11KB/s","network":"tcp","packet-encoding":"","port":993,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 094 | ⬇️ 39KB/s","network":"tcp","packet-encoding":"","port":993,"reality-opts":{"public-key":"Nnpwm8dqFl9dlMJmg0M9G11vmgCKzNagFTn4tH4sWy4"},"server":"88.218.44.4","servername":"swcdn.apple.com","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"cipher":"aes-256-gcm","name":"🇷🇺 RU 095 | ⬇️ 16KB/s","password":"bdb313adf74c2ede","port":20916,"server":"195.133.5.207","skip-cert-verify":false,"type":"ss","udp":false}
+ - {"name":"🇮🇳 IN 096 | ⬇️ 9KB/s","password":"","port":1088,"server":"144.24.111.128","type":"socks5","username":""}
+ - {"client-fingerprint":"chrome","name":"🇺🇸 US 097 | ⬇️ 785KB/s","network":"ws","port":443,"server":"104.16.106.217","servername":"dr.evanjson.sbs","tls":true,"type":"vless","udp":true,"uuid":"95470b1b-2164-4243-b977-ab6784f468e6","ws-opts":{"headers":{"Host":"dr.evanjson.sbs"},"path":"/uhznws"}}
+ - {"name":"🇨🇴 CO 098 | ⬇️ 96KB/s","network":"tcp","packet-encoding":"","port":62145,"server":"149.130.184.51","skip-cert-verify":false,"tls":false,"type":"vless","udp":true,"uuid":"8fb65472-5957-4f64-ba2d-b5812b2f155a"}
+ - {"alpn":["h2"],"client-fingerprint":"firefox","encryption":"none","name":"🇩🇪 DE 099 | ⬇️ 25KB/s","network":"raw","packet-encoding":"xudp","port":443,"server":"217.60.193.1","servername":"ddc-akn.astralweb.tech","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"5c192fd7-ef98-4112-a20c-129108fcd7e9"}
+ - {"client-fingerprint":"chrome","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 100 | ⬇️ 16KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 101 | ⬇️ 17KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"name":"🇰🇷 KR 102 | ⬇️ 10KB/s","password":"","port":1090,"server":"121.169.46.116","skip-cert-verify":true,"type":"socks5","username":""}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 103 | ⬇️ 21KB/s","network":"tcp","packet-encoding":"","port":993,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 104 | ⬇️ 20KB/s","network":"tcp","port":993,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 105 | ⬇️ 22KB/s","network":"tcp","packet-encoding":"","port":993,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"firefox","name":"🇩🇪 DE 106 | ⬇️ 44KB/s","network":"tcp","packet-encoding":"xudp","port":443,"server":"217.60.193.1","servername":"ddc-akn.astralweb.tech","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"5c192fd7-ef98-4112-a20c-129108fcd7e9"}
+ - {"client-fingerprint":"firefox","name":"🇩🇪 DE 107 | ⬇️ 60KB/s","network":"tcp","packet-encoding":"xudp","port":443,"server":"217.60.193.1","servername":"ddc-akn.astralweb.tech","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"5c192fd7-ef98-4112-a20c-129108fcd7e9"}
+ - {"client-fingerprint":"chrome","encryption":"none","flow":"xtls-rprx-vision","name":"🇺🇸 US 108 | ⬇️ 19KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 109 | ⬇️ 28KB/s","network":"tcp","packet-encoding":"","port":993,"reality-opts":{"public-key":"Nnpwm8dqFl9dlMJmg0M9G11vmgCKzNagFTn4tH4sWy4"},"server":"88.218.44.4","servername":"swcdn.apple.com","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"alpn":["h2"],"client-fingerprint":"firefox","encryption":"none","name":"🇩🇪 DE 110 | ⬇️ 51KB/s","network":"tcp","packet-encoding":"xudp","port":443,"server":"217.60.193.1","servername":"ddc-akn.astralweb.tech","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"5c192fd7-ef98-4112-a20c-129108fcd7e9"}
+ - {"name":"🇺🇸 US 111 | ⬇️ 309KB/s","password":"","port":22222,"server":"193.25.215.182","type":"socks5","username":""}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 112 | ⬇️ 15KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"name":"🇸🇪 SE 113 | ⬇️ 102KB/s","password":"71cada65-d23e-418c-88e4-a06188d14689","port":443,"server":"87.121.105.108","skip-cert-verify":false,"sni":"swe-one.quiet-rogue.site","tfo":false,"type":"hysteria2"}
+ - {"name":"🇬🇧 GB 114 | ⬇️ 65KB/s","port":1080,"server":"83.147.216.208","type":"socks5","udp":true}
+ - {"client-fingerprint":"chrome","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 115 | ⬇️ 16KB/s","network":"grpc","port":8443,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8","short-id":""},"server":"88.218.44.4","servername":"dl.google.com","tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4","xudp":true}
+ - {"client-fingerprint":"firefox","name":"🇩🇪 DE 116 | ⬇️ 25KB/s","network":"tcp","packet-encoding":"","port":443,"server":"217.60.193.1","servername":"ddc-akn.astralweb.tech","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"5c192fd7-ef98-4112-a20c-129108fcd7e9"}
+ - {"client-fingerprint":"chrome","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 117 | ⬇️ 15KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"firefox","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 118 | ⬇️ 40KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"e6d41d6f-d58a-7650-bba4-d7f0dde3ba4d"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 119 | ⬇️ 14KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"firefox","name":"🇯🇵 JP 120 | ⬇️ 160KB/s","network":"tcp","port":443,"reality-opts":{"public-key":"F2VfBr2UmjDTErB_oruvW5aIvzH_xGfM2AW5_w-DF0I"},"server":"pro-jp.emrata.top","servername":"pro-jp.emrata.top","tls":true,"type":"vless","uuid":"2e4101cd-40b4-4d1a-8df6-cc949c136e5a"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 121 | ⬇️ 18KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 122 | ⬇️ 13KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"Nnpwm8dqFl9dlMJmg0M9G11vmgCKzNagFTn4tH4sWy4"},"server":"88.218.44.4","servername":"swcdn.apple.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"name":"🇨🇴 CO 123 | ⬇️ 456KB/s","network":"tcp","port":62145,"server":"157.137.221.166","type":"vless","uuid":"8fb65472-5957-4f64-ba2d-b5812b2f155a"}
+ - {"alterId":2,"cipher":"auto","client-fingerprint":"","name":"🇫🇷 FR 124 | ⬇️ 16KB/s","network":"tcp","port":30835,"server":"v35.hdacd.com","tls":false,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"client-fingerprint":"firefox","name":"🇩🇪 DE 125 | ⬇️ 45KB/s","network":"tcp","port":443,"server":"217.60.193.1","servername":"ddc-akn.astralweb.tech","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"5c192fd7-ef98-4112-a20c-129108fcd7e9"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 126 | ⬇️ 19KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"Nnpwm8dqFl9dlMJmg0M9G11vmgCKzNagFTn4tH4sWy4"},"server":"88.218.44.4","servername":"swcdn.apple.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 127 | ⬇️ 37KB/s","network":"tcp","packet-encoding":"","port":23253,"server":"los.chihirokk.online","servername":"los.chihirokk.online","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"0c946396-6336-40c3-a161-fcb6bec776ce"}
+ - {"client-fingerprint":"chrome","encryption":"none","flow":"xtls-rprx-vision","name":"🇺🇸 US 128 | ⬇️ 20KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"cipher":"aes-256-gcm","name":"🇷🇺 RU 129 | ⬇️ 14KB/s","password":"bdb313adf74c2ede","port":20916,"server":"195.133.5.207","type":"ss"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 130 | ⬇️ 18KB/s","network":"tcp","packet-encoding":"","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","encryption":"none","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 131 | ⬇️ 22KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","encryption":"none","flow":"xtls-rprx-vision","name":"🇺🇸 US 132 | ⬇️ 34KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"name":"🇨🇴 CO 133 | ⬇️ 134KB/s","network":"tcp","packet-encoding":"xudp","port":62145,"server":"158.247.123.7","skip-cert-verify":false,"type":"vless","udp":true,"uuid":"8fb65472-5957-4f64-ba2d-b5812b2f155a"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 134 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 135 | ⬇️ 13KB/s","network":"tcp","packet-encoding":"","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 136 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h2"],"client-fingerprint":"firefox","encryption":"none","name":"🇩🇪 DE 137 | ⬇️ 31KB/s","network":"raw","packet-encoding":"xudp","port":443,"server":"217.60.193.1","servername":"ddc-akn.astralweb.tech","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"5c192fd7-ef98-4112-a20c-129108fcd7e9"}
+ - {"client-fingerprint":"chrome","encryption":"none","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 138 | ⬇️ 12KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"name":"🇺🇸 US 139 | ⬇️ 946KB/s","network":"ws","packet-encoding":"xudp","port":2095,"server":"104.17.101.139","skip-cert-verify":false,"tls":false,"type":"vless","udp":true,"uuid":"86c50e3a-5b87-49dd-bd20-03c7f2735e40","ws-opts":{"headers":{"Host":"fangbinxingnmsl.pusytroller.gq"},"path":"/"}}
+ - {"cipher":"aes-256-gcm","country":"🇨🇿CZ","name":"🇷🇺 RU 140 | ⬇️ 7KB/s","password":"bdb313adf74c2ede","port":20916,"server":"195.133.5.207","type":"ss"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 141 | ⬇️ 5KB/s","network":"tcp","port":993,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 142 | ⬇️ 15KB/s","network":"tcp","port":993,"reality-opts":{"public-key":"Nnpwm8dqFl9dlMJmg0M9G11vmgCKzNagFTn4tH4sWy4","short-id":""},"server":"88.218.44.4","servername":"swcdn.apple.com","tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"name":"🇰🇷 KR 143 | ⬇️ 30KB/s","password":"","port":1090,"server":"121.169.46.116","type":"socks5","username":"Og%3D%3D"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 144 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"client-fingerprint":"firefox","flow":"xtls-rprx-vision","name":"🇵🇱 PL 145 | ⬇️ 10KB/s","network":"tcp","packet-encoding":"xudp","port":443,"reality-opts":{"public-key":"wJP3dHSebpXt0VzXPkQQV641qIse5haPAUnJl4O4CBM","short-id":"a3b6822086b8b1a9"},"server":"pol01.port-server.online","servername":"pol01.port-server.online","tls":true,"type":"vless","udp":true,"uuid":"45c876f9-4900-40c0-b269-94871e78df54"}
+ - {"name":"🇸🇪 SE 146 | ⬇️ 151KB/s","password":"71cada65-d23e-418c-88e4-a06188d14689","port":443,"server":"87.121.105.108","skip-cert-verify":false,"sni":"swe-one.quiet-rogue.site","tfo":false,"type":"hysteria2"}
+ - {"name":"🇫🇷 FR 147 | ⬇️ 9KB/s","password":"","port":1088,"server":"51.178.49.241","type":"socks5","username":""}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 148 | ⬇️ 3MB/s","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"11 Mbps"}
+ - {"name":"🇰🇷 KR 149 | ⬇️ 33KB/s","port":1090,"server":"121.169.46.116","tls":false,"type":"socks5","username":"Og%3D%3D"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 150 | ⬇️ 884KB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"alterId":0,"cipher":"auto","http-opts":{"method":"GET","path":["/"]},"name":"🇯🇵 JP 151 | ⬇️ 2KB/s","network":"http","port":53268,"server":"47.74.43.250","tls":false,"type":"vmess","uuid":"16364b13-0e00-4f2e-82f0-37a721088953"}
+ - {"client-fingerprint":"chrome","encryption":"none","flow":"xtls-rprx-vision","name":"🇺🇸 US 152 | ⬇️ 18KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"Nnpwm8dqFl9dlMJmg0M9G11vmgCKzNagFTn4tH4sWy4"},"server":"88.218.44.4","servername":"swcdn.apple.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 153 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","udp":"true","up":"11 Mbps"}
+ - {"name":"🇳🇱 NL 154 | ⬇️ 18KB/s","password":"Private","port":1080,"server":"85.17.179.81","type":"socks5","username":"M_YOU_D"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 155 | ⬇️ 4MB/s","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"11 Mbps"}
+ - {"name":"🇩🇪 DE 156 | ⬇️ 76KB/s","network":"tcp","password":"ba07a8af-5544-48ac-ab62-3b6c00a44fa6","port":20041,"server":"hkdcrtc-e.catcat321.com","skip-cert-verify":true,"sni":"hkdcrtc-e.catcat321.com","type":"trojan","udp":true}
+ - {"alpn":["h2"],"client-fingerprint":"firefox","encryption":"none","name":"🇩🇪 DE 157 | ⬇️ 50KB/s","network":"tcp","packet-encoding":"xudp","port":443,"server":"217.60.193.1","servername":"ddc-akn.astralweb.tech","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"5c192fd7-ef98-4112-a20c-129108fcd7e9"}
+ - {"name":"🇳🇱 NL 158 | ⬇️ 320KB/s","port":1080,"server":"77.110.102.252","type":"socks5"}
+ - {"name":"🇨🇴 CO 159 | ⬇️ 127KB/s","network":"tcp","packet-encoding":"xudp","port":62145,"server":"149.130.185.31","skip-cert-verify":false,"type":"vless","udp":true,"uuid":"8fb65472-5957-4f64-ba2d-b5812b2f155a"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 160 | ⬇️ 263KB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"name":"🇷🇺 RU 161 | ⬇️ 13KB/s","password":"","port":1080,"server":"193.233.218.213","type":"socks5","username":""}
+ - {"name":"🇨🇴 CO 162 | ⬇️ 687KB/s","network":"tcp","port":62145,"server":"149.130.184.51","type":"vless","uuid":"8fb65472-5957-4f64-ba2d-b5812b2f155a"}
+ - {"client-fingerprint":"chrome","name":"🇩🇪 DE 163 | ⬇️ 95KB/s","network":"tcp","password":"ba07a8af-5544-48ac-ab62-3b6c00a44fa6","port":20041,"server":"hkdcrtc-e.catcat321.com","skip-cert-verify":true,"sni":"hkdcrtc-e.catcat321.com","type":"trojan"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 164 | ⬇️ 1KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","encryption":"none","grpc-opts":{"grpc-service-name":"update"},"name":"🇭🇰 HK 165 | ⬇️ 1MB/s","network":"grpc","packet-encoding":"xudp","port":10126,"reality-opts":{"public-key":"wOu-BMrXvk9KX23JZrlpUlF4SMjDcejm0vNECdhy5xE","short-id":"686c0ef0"},"server":"hk1-r.link-t7.com","servername":"s0.awsstatic.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"57A71E7F-E6B5-42BF-A4A6-47ECCBE7F50C"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 166 | ⬇️ 13KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"Nnpwm8dqFl9dlMJmg0M9G11vmgCKzNagFTn4tH4sWy4"},"server":"88.218.44.4","servername":"swcdn.apple.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 167 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"client-fingerprint":"chrome","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 168 | ⬇️ 26KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 169 | ⬇️ 4MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"name":"🇭🇰 HK 170 | ⬇️ 5KB/s","password":"123","port":3060,"server":"43.100.43.112","type":"socks5","username":"123"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 171 | ⬇️ 25KB/s","network":"tcp","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"name":"🇮🇳 IN 172 | ⬇️ 11KB/s","password":"","port":1088,"server":"144.24.111.128","type":"socks5","username":""}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 173 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 174 | ⬇️ 40KB/s","network":"tcp","port":993,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8","short-id":""},"server":"88.218.44.4","servername":"dl.google.com","tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 175 | ⬇️ 3MB/s","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"11 Mbps"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 176 | ⬇️ 13KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 177 | ⬇️ 4MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"client-fingerprint":"firefox","grpc-opts":{"grpc-service-name":"TunService","path":"/"},"name":"🇺🇸 US 178 | ⬇️ 47KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"e6d41d6f-d58a-7650-bba4-d7f0dde3ba4d"}
+ - {"client-fingerprint":"firefox","name":"🇩🇪 DE 179 | ⬇️ 51KB/s","network":"tcp","packet-encoding":"xudp","port":443,"server":"217.60.193.1","servername":"ddc-akn.astralweb.tech","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"5c192fd7-ef98-4112-a20c-129108fcd7e9"}
+ - {"client-fingerprint":"chrome","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 180 | ⬇️ 27KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"firefox","flow":"xtls-rprx-vision","name":"🇵🇱 PL 181 | ⬇️ 13KB/s","network":"tcp","packet-encoding":"xudp","port":443,"reality-opts":{"public-key":"wJP3dHSebpXt0VzXPkQQV641qIse5haPAUnJl4O4CBM","short-id":"a3b6822086b8b1a9"},"server":"2.26.148.173","servername":"pol01.port-server.online","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"45c876f9-4900-40c0-b269-94871e78df54"}
+ - {"client-fingerprint":"chrome","encryption":"none","name":"🇺🇸 US 182 | ⬇️ 83KB/s","network":"xhttp","packet-encoding":"xudp","port":443,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4","xhttp-opts":{"mode":"auto","path":"/"}}
+ - {"client-fingerprint":"chrome","encryption":"none","flow":"xtls-rprx-vision","name":"🇨🇿 CZ 183 | ⬇️ 10KB/s","network":"tcp","packet-encoding":"xudp","port":443,"reality-opts":{"public-key":"Kb0rDCu2kKhfnC6bsi0DMRxDej9S-Mu1vVza1H1l4U4","short-id":"0c"},"server":"188.127.247.129","servername":"yahoo.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"33aa2b47-484b-49f6-8f23-fb34602d221f"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 184 | ⬇️ 3MB/s","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 185 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","udp":"true","up":"11 Mbps"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 186 | ⬇️ 18KB/s","network":"tcp","port":993,"reality-opts":{"public-key":"Nnpwm8dqFl9dlMJmg0M9G11vmgCKzNagFTn4tH4sWy4"},"server":"88.218.44.4","servername":"swcdn.apple.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 187 | ⬇️ 97KB/s","network":"tcp","packet-encoding":"xudp","port":22264,"reality-opts":{"public-key":"zVts3v2fSpuI92D5vyC8sZBplE_kPmPVLk0ihCoLYTE","short-id":"6ba85179e30d4fc2"},"server":"156.238.230.3","servername":"academy.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"d71ce631-d4e6-4385-98a8-aa39473487d0"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 188 | ⬇️ 3MB/s","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 189 | ⬇️ 4MB/s","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"11 Mbps"}
+ - {"client-fingerprint":"firefox","grpc-opts":{"grpc-service-name":"grpc"},"name":"🇩🇪 DE 190 | ⬇️ 1MB/s","network":"grpc","packet-encoding":"xudp","port":7443,"reality-opts":{"public-key":"P5eqN_q-Vq7M8YgrTIS_yZBgWLskGKQ9hAHhW__R6js","short-id":"89136b6e"},"server":"193.233.74.57","servername":"www.telekom.de","tls":true,"type":"vless","udp":true,"uuid":"218fd696-e3a2-4c33-b397-a5f13a82969e","xudp":true}
+ - {"name":"🇩🇪 DE 191 | ⬇️ 120KB/s","network":"tcp","password":"ba07a8af-5544-48ac-ab62-3b6c00a44fa6","port":20041,"server":"hkdcrtc-e.catcat321.com","skip-cert-verify":true,"sni":"hkdcrtc-e.catcat321.com","type":"trojan","udp":true}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 192 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 193 | ⬇️ 3MB/s","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 194 | ⬇️ 3MB/s","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 195 | ⬇️ 4MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","udp":"true","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 196 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 197 | ⬇️ 2MB/s","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 198 | ⬇️ 4MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","udp":"true","up":"11 Mbps"}
+ - {"client-fingerprint":"chrome","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 199 | ⬇️ 69KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 200 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","udp":"true","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 201 | ⬇️ 4MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 202 | ⬇️ 4MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 203 | ⬇️ 3MB/s","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 204 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 205 | ⬇️ 28KB/s","network":"tcp","port":993,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 206 | ⬇️ 3MB/s","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 207 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","udp":"true","up":"11 Mbps"}
+ - {"client-fingerprint":"chrome","encryption":"none","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇹🇷 TR 208 | ⬇️ 602KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"D2SXHZRRYM0WcFChGWd57XB-U73aIsGfMpe2-Gq5XSs"},"server":"170.168.97.3","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"5e243126-4a2a-84b6-782a-73b14797fb5f"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 209 | ⬇️ 2MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 210 | ⬇️ 3MB/s","port":20088,"protocol":"udp","server":"5.83.129.153","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"cipher":"aes-128-gcm","name":"🇺🇸 US 211 | ⬇️ 37KB/s","password":"xo6k84l7b00n2hJp","port":57841,"server":"23.185.200.135","skip-cert-verify":false,"type":"ss","udp":false}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 212 | ⬇️ 4MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","udp":"true","up":"11 Mbps"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 213 | ⬇️ 40KB/s","network":"tcp","packet-encoding":"","port":993,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","grpc-opts":{"grpc-mode":"gun","grpc-service-name":"TunService"},"name":"🇺🇸 US 214 | ⬇️ 19KB/s","network":"grpc","port":8443,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 215 | ⬇️ 4MB/s","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 216 | ⬇️ 4MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 217 | ⬇️ 4MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","udp":"true","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 218 | ⬇️ 2MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 219 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 220 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","udp":"true","up":"11 Mbps"}
+ - {"client-fingerprint":"chrome","name":"🇩🇪 DE 221 | ⬇️ 45KB/s","network":"tcp","password":"ba07a8af-5544-48ac-ab62-3b6c00a44fa6","port":20041,"server":"hkdcrtc-e.catcat321.com","skip-cert-verify":true,"sni":"hkdcrtc-e.catcat321.com","type":"trojan"}
+ - {"client-fingerprint":"chrome","name":"🇺🇸 US 222 | ⬇️ 19KB/s","network":"xhttp","packet-encoding":"xudp","port":443,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 223 | ⬇️ 2MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","udp":"true","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 224 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 225 | ⬇️ 2MB/s","obfs":"","port":20088,"protocol":"udp","server":"5.83.129.153","skip-cert-verify":true,"sni":"apple.com","sub-tag":"C002-260622","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 226 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 227 | ⬇️ 662KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55","name":"🇩🇪 DE 228 | ⬇️ 908KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"bing.com","sub-tag":"K001-260618","type":"hysteria","up":"11"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 229 | ⬇️ 1MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55","name":"🇩🇪 DE 230 | ⬇️ 682KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"bing.com","sub-tag":"K001-260618","type":"hysteria","up":"11"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 231 | ⬇️ 2MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","udp":"true","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 232 | ⬇️ 887KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"name":"🇷🇺 RU 233 | ⬇️ 27KB/s","port":1080,"server":"193.233.218.213","type":"socks5","udp":true}
+ - {"client-fingerprint":"chrome","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 234 | ⬇️ 27KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 235 | ⬇️ 4MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 236 | ⬇️ 762KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 237 | ⬇️ 577KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alterId":2,"cipher":"auto","name":"🇺🇸 US 238 | ⬇️ 9MB/s","network":"tcp","port":30829,"server":"v29.hdacd.com","tls":false,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 239 | ⬇️ 3MB/s","port":20088,"protocol":"udp","server":"5.83.129.153","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 240 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","udp":"true","up":"11 Mbps"}
+ - {"auth":"71cada65-d23e-418c-88e4-a06188d14689","name":"🇸🇪 SE 241 | ⬇️ 544KB/s","password":"71cada65-d23e-418c-88e4-a06188d14689","port":443,"server":"87.121.105.108","skip-cert-verify":true,"sni":"swe-one.quiet-rogue.site","type":"hysteria2"}
+ - {"cipher":"aes-256-gcm","name":"🇷🇺 RU 242 | ⬇️ 12KB/s","password":"bdb313adf74c2ede","port":20916,"server":"195.133.5.207","skip-cert-verify":false,"type":"ss","udp":false}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 243 | ⬇️ 4MB/s","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 244 | ⬇️ 3MB/s","port":20088,"protocol":"udp","server":"5.83.129.153","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 245 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 246 | ⬇️ 23KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"Nnpwm8dqFl9dlMJmg0M9G11vmgCKzNagFTn4tH4sWy4"},"server":"88.218.44.4","servername":"swcdn.apple.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 247 | ⬇️ 23KB/s","network":"tcp","packet-encoding":"","port":993,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"name":"🇮🇳 IN 248 | ⬇️ 9KB/s","password":"","port":1088,"server":"144.24.111.128","type":"socks5","udp":true,"username":""}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 249 | ⬇️ 921KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"name":"🇮🇳 IN 250 | ⬇️ 12KB/s","password":"","port":1088,"server":"144.24.111.128","type":"socks5","username":""}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 251 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","udp":"true","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 252 | ⬇️ 4MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 253 | ⬇️ 3MB/s","port":20088,"protocol":"udp","server":"5.83.129.153","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 254 | ⬇️ 4MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 255 | ⬇️ 740KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55","name":"🇩🇪 DE 256 | ⬇️ 746KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"bing.com","sub-tag":"K001-260618","type":"hysteria","up":"11"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 257 | ⬇️ 3MB/s","port":20088,"protocol":"udp","server":"5.83.129.153","skip-cert-verify":true,"sni":"apple.com","sub-tag":"R002-260618","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 258 | ⬇️ 3MB/s","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 259 | ⬇️ 4MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"client-fingerprint":"chrome","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 260 | ⬇️ 30KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 261 | ⬇️ 5MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","udp":"true","up":"11 Mbps"}
+ - {"client-fingerprint":"chrome","name":"🇩🇪 DE 262 | ⬇️ 56KB/s","network":"tcp","password":"ba07a8af-5544-48ac-ab62-3b6c00a44fa6","port":20041,"server":"Hkdcrtc-e.catcat321.com","skip-cert-verify":true,"sni":"de.catxstar.com","type":"trojan"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 263 | ⬇️ 3MB/s","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"11 Mbps"}
+ - {"name":"🇮🇳 IN 264 | ⬇️ 9KB/s","password":"","port":1088,"server":"144.24.111.128","type":"socks5","username":""}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 265 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 266 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","udp":"true","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 267 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","udp":"true","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 268 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 269 | ⬇️ 3MB/s","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"11 Mbps"}
+ - {"client-fingerprint":"chrome","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 270 | ⬇️ 62KB/s","network":"grpc","port":8443,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8","short-id":""},"server":"88.218.44.4","servername":"dl.google.com","tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4","xudp":true}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 271 | ⬇️ 597KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55","name":"🇩🇪 DE 272 | ⬇️ 881KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"bing.com","sub-tag":"K001-260618","type":"hysteria","up":"11"}
+ - {"name":"🇳🇱 NL 273 | ⬇️ 499KB/s","password":"","port":1080,"server":"77.110.102.252","type":"socks5","username":""}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 274 | ⬇️ 947KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 275 | ⬇️ 4MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 276 | ⬇️ 3MB/s","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"11 Mbps"}
+ - {"client-fingerprint":"chrome","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 277 | ⬇️ 37KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 278 | ⬇️ 760KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 279 | ⬇️ 1MB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 280 | ⬇️ 1MB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 281 | ⬇️ 629KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"name":"🇰🇷 KR 282 | ⬇️ 17KB/s","password":"","port":1090,"server":"121.169.46.116","skip-cert-verify":true,"type":"socks5","username":""}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 283 | ⬇️ 685KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 284 | ⬇️ 1MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 285 | ⬇️ 532KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 286 | ⬇️ 557KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 287 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 288 | ⬇️ 4MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","udp":"true","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 289 | ⬇️ 2MB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 290 | ⬇️ 802KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"client-fingerprint":"firefox","flow":"xtls-rprx-vision","name":"🇵🇱 PL 291 | ⬇️ 17KB/s","network":"tcp","port":443,"reality-opts":{"public-key":"wJP3dHSebpXt0VzXPkQQV641qIse5haPAUnJl4O4CBM","short-id":"a3b6822086b8b1a9"},"server":"2.26.148.173","servername":"pol01.port-server.online","tls":true,"type":"vless","udp":true,"uuid":"45c876f9-4900-40c0-b269-94871e78df54"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 292 | ⬇️ 707KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 293 | ⬇️ 636KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"client-fingerprint":"firefox","encryption":"none","flow":"xtls-rprx-vision","name":"🇫🇮 FI 294 | ⬇️ 207KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"D2SXHZRRYM0WcFChGWd57XB-U73aIsGfMpe2-Gq5XSs"},"server":"170.168.97.3","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"e6d41d6f-d58a-7650-bba4-d7f0dde3ba4d"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 295 | ⬇️ 800KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 296 | ⬇️ 694KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 297 | ⬇️ 333KB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 298 | ⬇️ 787KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 299 | ⬇️ 630KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 300 | ⬇️ 488KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 301 | ⬇️ 2MB/s","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 302 | ⬇️ 807KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 303 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","udp":"true","up":"11 Mbps"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 304 | ⬇️ 866KB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 305 | ⬇️ 603KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 306 | ⬇️ 509KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"client-fingerprint":"chrome","encryption":"none","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇫🇮 FI 307 | ⬇️ 240KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"D2SXHZRRYM0WcFChGWd57XB-U73aIsGfMpe2-Gq5XSs"},"server":"170.168.97.3","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"5e243126-4a2a-84b6-782a-73b14797fb5f"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55","name":"🇩🇪 DE 308 | ⬇️ 662KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"bing.com","sub-tag":"K001-260618","type":"hysteria","up":"11"}
+ - {"name":"🇰🇷 KR 309 | ⬇️ 406KB/s","password":"111","port":20000,"server":"101.33.74.115","skip-cert-verify":true,"type":"socks5","udp":true,"username":"111"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 310 | ⬇️ 4MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 311 | ⬇️ 687KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55","name":"🇩🇪 DE 312 | ⬇️ 573KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"bing.com","sub-tag":"K001-260618","type":"hysteria","up":"11"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 313 | ⬇️ 723KB/s","port":54177,"server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 314 | ⬇️ 670KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","sub-tag":"C002-260622","type":"hysteria","udp":"true","up":"500"}
+ - {"name":"🇳🇱 NL 315 | ⬇️ 22KB/s","password":"Private","port":1080,"server":"85.17.179.81","type":"socks5","username":"M_YOU_D"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55","name":"🇩🇪 DE 316 | ⬇️ 796KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"bing.com","sub-tag":"K001-260618","type":"hysteria","up":"11"}
+ - {"name":"🇸🇪 SE 317 | ⬇️ 269KB/s","password":"71cada65-d23e-418c-88e4-a06188d14689","port":443,"server":"87.121.105.108","skip-cert-verify":false,"sni":"swe-one.quiet-rogue.site","tfo":false,"type":"hysteria2"}
+ - {"client-fingerprint":"firefox","name":"🇩🇪 DE 318 | ⬇️ 52KB/s","network":"tcp","packet-encoding":"xudp","port":443,"server":"217.60.193.1","servername":"ddc-akn.astralweb.tech","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"5c192fd7-ef98-4112-a20c-129108fcd7e9"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 319 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55","name":"🇩🇪 DE 320 | ⬇️ 916KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"bing.com","sub-tag":"K001-260618","type":"hysteria","up":"11"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 321 | ⬇️ 48KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"Nnpwm8dqFl9dlMJmg0M9G11vmgCKzNagFTn4tH4sWy4"},"server":"88.218.44.4","servername":"swcdn.apple.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 322 | ⬇️ 4MB/s","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 323 | ⬇️ 900KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 324 | ⬇️ 917KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 325 | ⬇️ 603KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 326 | ⬇️ 600KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"client-fingerprint":"chrome","encryption":"none","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇫🇮 FI 327 | ⬇️ 197KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"D2SXHZRRYM0WcFChGWd57XB-U73aIsGfMpe2-Gq5XSs"},"server":"170.168.97.3","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"5e243126-4a2a-84b6-782a-73b14797fb5f"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 328 | ⬇️ 596KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 329 | ⬇️ 988KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 330 | ⬇️ 607KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 331 | ⬇️ 893KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 332 | ⬇️ 930KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 333 | ⬇️ 808KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 334 | ⬇️ 852KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h2","http/1.1"],"client-fingerprint":"chrome","encryption":"mlkem768x25519plus.native.0rtt.BBBQ6KZyjiYmpp2ErhKd0OwCBOm4J6_McyVQdB5yhBI","name":"🇩🇪 DE 335 | ⬇️ 918KB/s","network":"xhttp","port":8443,"server":"104.16.6.189","servername":"butimcreepimweirdo.dpdns.org","tls":true,"type":"vless","udp":true,"uuid":"@V2XNET","xhttp-opts":{"host":"butimcreepimweirdo.dpdns.org","mode":"auto","path":"/","x-padding-bytes":"100-1000"}}
+ - {"client-fingerprint":"chrome","encryption":"none","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇫🇮 FI 336 | ⬇️ 220KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"D2SXHZRRYM0WcFChGWd57XB-U73aIsGfMpe2-Gq5XSs"},"server":"170.168.97.3","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"5e243126-4a2a-84b6-782a-73b14797fb5f"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 337 | ⬇️ 619KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 338 | ⬇️ 1006KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 339 | ⬇️ 706KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 340 | ⬇️ 557KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 341 | ⬇️ 31KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"name":"🇮🇳 IN 342 | ⬇️ 15KB/s","password":"","port":1088,"server":"144.24.111.128","type":"socks5","username":""}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 343 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 344 | ⬇️ 4MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 345 | ⬇️ 717KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 346 | ⬇️ 1MB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 347 | ⬇️ 582KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"name":"🇩🇪 DE 348 | ⬇️ 165KB/s","network":"tcp","password":"ba07a8af-5544-48ac-ab62-3b6c00a44fa6","port":20041,"server":"hkdcrtc-e.catcat321.com","skip-cert-verify":true,"sni":"de.catxstar.com","type":"trojan"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 349 | ⬇️ 994KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 350 | ⬇️ 799KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 351 | ⬇️ 586KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 352 | ⬇️ 688KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 353 | ⬇️ 367KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 354 | ⬇️ 854KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 355 | ⬇️ 552KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 356 | ⬇️ 707KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 357 | ⬇️ 2MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 358 | ⬇️ 786KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"client-fingerprint":"chrome","encryption":"none","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇫🇮 FI 359 | ⬇️ 26KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"D2SXHZRRYM0WcFChGWd57XB-U73aIsGfMpe2-Gq5XSs"},"server":"170.168.97.5","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"c6f220ed-41f2-21ba-438c-80f05ebbf92a"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 360 | ⬇️ 524KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","sub-tag":"C002-260622","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 361 | ⬇️ 524KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 362 | ⬇️ 813KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 363 | ⬇️ 662KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 364 | ⬇️ 630KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55","name":"🇩🇪 DE 365 | ⬇️ 754KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"bing.com","sub-tag":"K001-260618","type":"hysteria","up":"11"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 366 | ⬇️ 888KB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 367 | ⬇️ 575KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 368 | ⬇️ 681KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 369 | ⬇️ 2MB/s","port":20088,"protocol":"udp","server":"5.83.129.153","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 370 | ⬇️ 652KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55","name":"🇩🇪 DE 371 | ⬇️ 573KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"bing.com","sub-tag":"K001-260618","type":"hysteria","up":"11"}
+ - {"name":"🇰🇷 KR 372 | ⬇️ 364KB/s","port":1090,"server":"121.169.46.116","tls":false,"type":"socks5","username":"Og%3D%3D"}
+ - {"client-fingerprint":"firefox","name":"🇩🇪 DE 373 | ⬇️ 149KB/s","network":"tcp","packet-encoding":"xudp","port":443,"server":"217.60.193.1","servername":"ddc-akn.astralweb.tech","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"5c192fd7-ef98-4112-a20c-129108fcd7e9"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 374 | ⬇️ 580KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h2"],"client-fingerprint":"firefox","encryption":"none","name":"🇩🇪 DE 375 | ⬇️ 67KB/s","network":"raw","packet-encoding":"xudp","port":443,"server":"217.60.193.1","servername":"ddc-akn.astralweb.tech","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"5c192fd7-ef98-4112-a20c-129108fcd7e9"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 376 | ⬇️ 662KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"client-fingerprint":"firefox","encryption":"none","flow":"xtls-rprx-vision","name":"🇫🇮 FI 377 | ⬇️ 75KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"D2SXHZRRYM0WcFChGWd57XB-U73aIsGfMpe2-Gq5XSs"},"server":"170.168.97.3","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"e6d41d6f-d58a-7650-bba4-d7f0dde3ba4d"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 378 | ⬇️ 971KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55","name":"🇩🇪 DE 379 | ⬇️ 712KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"bing.com","sub-tag":"K001-260618","type":"hysteria","up":"11"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 380 | ⬇️ 1MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 381 | ⬇️ 530KB/s","port":54177,"server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 382 | ⬇️ 712KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"client-fingerprint":"firefox","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇫🇮 FI 383 | ⬇️ 81KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"D2SXHZRRYM0WcFChGWd57XB-U73aIsGfMpe2-Gq5XSs"},"server":"170.168.97.3","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"e6d41d6f-d58a-7650-bba4-d7f0dde3ba4d"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 384 | ⬇️ 670KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55","name":"🇩🇪 DE 385 | ⬇️ 501KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"bing.com","sub-tag":"K001-260618","type":"hysteria","up":"11"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 386 | ⬇️ 748KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 387 | ⬇️ 823KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 388 | ⬇️ 560KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 389 | ⬇️ 697KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 390 | ⬇️ 831KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","sub-tag":"C002-260622","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 391 | ⬇️ 838KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55","name":"🇩🇪 DE 392 | ⬇️ 1MB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"bing.com","sub-tag":"K001-260618","type":"hysteria","up":"11"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 393 | ⬇️ 845KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 394 | ⬇️ 1MB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 395 | ⬇️ 679KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 396 | ⬇️ 599KB/s","port":54177,"server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55 Mbps","name":"🇩🇪 DE 397 | ⬇️ 3MB/s","obfs":"","port":26691,"protocol":"udp","server":"5.83.129.143","skip-cert-verify":true,"sni":"apple.com","sub-tag":"K001-260618","type":"hysteria","up":"11 Mbps"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55","name":"🇩🇪 DE 398 | ⬇️ 431KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"bing.com","sub-tag":"K001-260618","type":"hysteria","up":"11"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 399 | ⬇️ 501KB/s","port":54177,"server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 400 | ⬇️ 581KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 401 | ⬇️ 964KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 402 | ⬇️ 1MB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","sub-tag":"C002-260622","type":"hysteria","udp":"true","up":"500"}
+ - {"name":"🇩🇪 DE 403 | ⬇️ 88KB/s","network":"tcp","password":"ba07a8af-5544-48ac-ab62-3b6c00a44fa6","port":20041,"server":"hkdcrtc-e.catcat321.com","skip-cert-verify":true,"sni":"de.catxstar.com","type":"trojan","udp":true}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55","name":"🇩🇪 DE 404 | ⬇️ 1MB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"bing.com","sub-tag":"K001-260618","type":"hysteria","up":"11"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 405 | ⬇️ 760KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 406 | ⬇️ 671KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55","name":"🇩🇪 DE 407 | ⬇️ 666KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"bing.com","sub-tag":"K001-260618","type":"hysteria","up":"11"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55","name":"🇩🇪 DE 408 | ⬇️ 1007KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"bing.com","sub-tag":"K001-260618","type":"hysteria","up":"11"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 409 | ⬇️ 651KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 410 | ⬇️ 642KB/s","port":54177,"server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 411 | ⬇️ 466KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 412 | ⬇️ 919KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"name":"🇩🇪 DE 413 | ⬇️ 122KB/s","network":"tcp","password":"ba07a8af-5544-48ac-ab62-3b6c00a44fa6","port":20041,"server":"hkdcrtc-e.catcat321.com","skip-cert-verify":true,"sni":"de.catxstar.com","type":"trojan"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"55","name":"🇩🇪 DE 414 | ⬇️ 751KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"bing.com","sub-tag":"K001-260618","type":"hysteria","up":"11"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 415 | ⬇️ 1MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 416 | ⬇️ 1MB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 417 | ⬇️ 894KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","sub-tag":"C002-260622","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 418 | ⬇️ 648KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 419 | ⬇️ 559KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":1000,"name":"🇩🇪 DE 420 | ⬇️ 798KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":true,"up":500}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 421 | ⬇️ 638KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","sub-tag":"C002-260622","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","auth_str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 422 | ⬇️ 901KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 423 | ⬇️ 826KB/s","obfs":"","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","sub-tag":"C002-260622","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 424 | ⬇️ 713KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 425 | ⬇️ 636KB/s","port":54177,"protocol":"udp","server":"5.83.129.90","skip-cert-verify":true,"sni":"apple.com","type":"hysteria","udp":"true","up":"500"}
+ - {"client-fingerprint":"chrome","name":"🇩🇪 DE 426 | ⬇️ 137KB/s","network":"tcp","password":"ba07a8af-5544-48ac-ab62-3b6c00a44fa6","port":20041,"server":"hkdcrtc-e.catcat321.com","skip-cert-verify":true,"sni":"hkdcrtc-e.catcat321.com","type":"trojan"}
+ - {"client-fingerprint":"chrome","encryption":"none","name":"🇺🇸 US 427 | ⬇️ 30KB/s","network":"xhttp","packet-encoding":"xudp","port":443,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4","xhttp-opts":{"mode":"auto","path":"/"}}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 428 | ⬇️ 20KB/s","network":"tcp","port":993,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"cipher":"2022-blake3-aes-128-gcm","name":"🇰🇷 KR 429 | ⬇️ 18MB/s","password":"Y2FkNzhhZWQ0MzA1NzlhZA==:YmU0ZDQzODMtYWFhZi00Yg==","port":31304,"server":"sg.csfcpun8nb61wyygrclw.cdn000.com","skip-cert-verify":false,"type":"ss","udp":false}
+ - {"cipher":"2022-blake3-aes-128-gcm","name":"🇰🇷 KR 430 | ⬇️ 19MB/s","password":"Y2FkNzhhZWQ0MzA1NzlhZA==:YmU0ZDQzODMtYWFhZi00Yg==","port":31304,"server":"sg.csfcpun8nb61wyygrclw.cdn000.com","skip-cert-verify":false,"type":"ss","udp":false}
+ - {"name":"🇳🇱 NL 431 | ⬇️ 20KB/s","password":"Private","port":1080,"server":"85.17.179.81","tls":false,"type":"socks5","username":"M_YOU_D"}
+ - {"client-fingerprint":"chrome","encryption":"none","flow":"xtls-rprx-vision","name":"🇨🇦 CA 432 | ⬇️ 18KB/s","network":"tcp","packet-encoding":"xudp","port":5151,"reality-opts":{"public-key":"T3vWH0zPUrOsgdK7cvEEnMbS3LIJDxQ17_L_GhmZJ0E","short-id":"69b851"},"server":"185.206.170.69","servername":"www.yahoo.com","tls":true,"type":"vless","udp":true,"uuid":"26c0589f-79e5-4789-8ff7-914f2e26e8e5","xudp":true}
+ - {"cipher":"2022-blake3-aes-128-gcm","name":"🇰🇷 KR 433 | ⬇️ 15MB/s","password":"Y2FkNzhhZWQ0MzA1NzlhZA==:YmU0ZDQzODMtYWFhZi00Yg==","port":31304,"server":"sg.csfcpun8nb61wyygrclw.cdn000.com","skip-cert-verify":false,"type":"ss","udp":false}
+ - {"client-fingerprint":"chrome","name":"🇹🇼 TW 434 | ⬇️ 1MB/s","network":"tcp","password":"55354c2b8ee339571bd657a9bb9858cc","port":39221,"server":"speed-01.aliyun-web-tracker.cn","skip-cert-verify":true,"sni":"speed-01.aliyun-web-tracker.cn","type":"trojan","udp":true}
+ - {"name":"🇹🇼 TW 435 | ⬇️ 680KB/s","network":"tcp","password":"55354c2b8ee339571bd657a9bb9858cc","port":39221,"server":"speed-01.aliyun-web-tracker.cn","skip-cert-verify":true,"sni":"speed-01.aliyun-web-tracker.cn","type":"trojan","udp":true}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 436 | ⬇️ 2MB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"name":"🇩🇪 DE 437 | ⬇️ 789KB/s","network":"ws","port":8880,"server":"193.227.99.54","tls":false,"type":"vless","udp":true,"uuid":"4f45e0ad-e854-4d2f-9ff2-fa1bee1afe37","ws-opts":{"headers":{"Host":"bgphajik.lorqino.ir"},"path":"/mmd","v2ray-http-upgrade":true}}
+ - {"name":"🇺🇸 US 438 | ⬇️ 7MB/s","network":"ws","port":2095,"server":"www.wto.org","skip-cert-verify":false,"tfo":true,"tls":false,"type":"vless","udp":true,"uuid":"86c50e3a-5b87-49dd-bd20-03c7f2735e40","ws-opts":{"headers":{"Host":"fuckingfangbinxing.pusytroller.cf"},"path":"/"}}
+ - {"alpn":["h2"],"client-fingerprint":"firefox","name":"🇩🇪 DE 439 | ⬇️ 99KB/s","network":"tcp","packet-encoding":"xudp","port":443,"server":"217.60.193.1","servername":"ddc-akn.astralweb.tech","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"5c192fd7-ef98-4112-a20c-129108fcd7e9"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 440 | ⬇️ 12KB/s","network":"tcp","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ","short-id":""},"server":"88.218.44.4","servername":"download.nvidia.com","tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 441 | ⬇️ 36KB/s","network":"tcp","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ","short-id":""},"server":"88.218.44.4","servername":"download.nvidia.com","tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"alterId":2,"cipher":"auto","name":"🇭🇰 HK 442 | ⬇️ 5KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":false,"tls":false,"type":"vmess","udp":true,"uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 443 | ⬇️ 16KB/s","network":"tcp","packet-encoding":"","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","name":"🇩🇪 DE 444 | ⬇️ 114KB/s","network":"tcp","password":"ba07a8af-5544-48ac-ab62-3b6c00a44fa6","port":20041,"server":"hkdcrtc-e.catcat321.com","skip-cert-verify":true,"sni":"hkdcrtc-e.catcat321.com","type":"trojan"}
+ - {"alterId":2,"cipher":"auto","name":"🇭🇰 HK 445 | ⬇️ 3KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"tls":false,"type":"vmess","udp":true,"uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"client-fingerprint":"qq","grpc-opts":{"grpc-mode":"gun","grpc-service-name":"5post.gate.v1"},"name":"🇩🇪 DE 446 | ⬇️ 569KB/s","network":"grpc","port":443,"reality-opts":{"public-key":"V6FabatADtcX7aO9KMjGCadJC4LuQ_5nRViab-z-nFQ","short-id":"abcd"},"server":"95.163.232.183","servername":"5post-gate.x5.ru","tls":true,"type":"vless","udp":true,"uuid":"fdccfb75-edb1-4b92-88a1-4bbbae8d1673"}
+ - {"client-fingerprint":"firefox","name":"🇸🇪 SE 447 | ⬇️ 1MB/s","network":"xhttp","port":443,"reality-opts":{"public-key":"UtbgFz4_cQT5v3SkjxgQ4QfOu7SLHkXXeO1pcxxTrT8"},"server":"84.32.99.238","servername":"recaptcha.net.cn","tls":true,"type":"vless","udp":true,"uuid":"f1c496bf-d2ab-45be-bc13-051d60d227b7","xhttp-opts":{"host":"recaptcha.net.cn","mode":"auto","path":"/api/v1/data"}}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 448 | ⬇️ 49KB/s","network":"tcp","packet-encoding":"","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":true,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"alterId":2,"cipher":"auto","country":"🇮🇷IR","h2-opts":{},"http-opts":{},"name":"🇭🇰 HK 449 | ⬇️ 10KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"client-fingerprint":"random","name":"🇳🇱 NL 450 | ⬇️ 492KB/s","network":"ws","port":443,"server":"www.visa.com.hk","servername":"nl-ams.862400.xyz","tls":true,"type":"vless","udp":true,"uuid":"98ca432c-4dd0-452e-a49c-552620e14358","ws-opts":{"headers":{"Host":"nl-ams.862400.xyz"},"path":"/announcement"}}
+ - {"name":"🇰🇷 KR 451 | ⬇️ 22KB/s","port":1090,"server":"121.169.46.116","tls":false,"type":"socks5","username":"Og%3D%3D"}
+ - {"alterId":2,"cipher":"auto","country":"🇮🇷IR","h2-opts":{},"http-opts":{},"name":"🇭🇰 HK 452 | ⬇️ 4KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"alterId":2,"cipher":"auto","client-fingerprint":"","name":"🇭🇰 HK 453 | ⬇️ 4KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","tls":false,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"alterId":2,"cipher":"auto","country":"🇮🇷IR","h2-opts":{},"http-opts":{},"name":"🇭🇰 HK 454 | ⬇️ 6KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"client-fingerprint":"chrome","encryption":"none","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇫🇮 FI 455 | ⬇️ 185KB/s","network":"grpc","port":8443,"reality-opts":{"public-key":"D2SXHZRRYM0WcFChGWd57XB-U73aIsGfMpe2-Gq5XSs","short-id":""},"server":"170.168.97.3","servername":"download.nvidia.com","tls":true,"type":"vless","udp":true,"uuid":"5e243126-4a2a-84b6-782a-73b14797fb5f","xudp":true}
+ - {"alterId":2,"cipher":"auto","name":"🇭🇰 HK 456 | ⬇️ 7KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","tls":false,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 457 | ⬇️ 7MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 458 | ⬇️ 976KB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"alterId":2,"cipher":"auto","name":"🇭🇰 HK 459 | ⬇️ 7KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","tls":false,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 460 | ⬇️ 5KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 461 | ⬇️ 19KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"Nnpwm8dqFl9dlMJmg0M9G11vmgCKzNagFTn4tH4sWy4"},"server":"88.218.44.4","servername":"swcdn.apple.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 462 | ⬇️ 3MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"alterId":2,"cipher":"auto","name":"🇭🇰 HK 463 | ⬇️ 5KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":false,"tls":false,"type":"vmess","udp":true,"uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 464 | ⬇️ 33KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"alterId":2,"cipher":"auto","client-fingerprint":"","name":"🇭🇰 HK 465 | ⬇️ 6KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","tls":false,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 466 | ⬇️ 5MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 467 | ⬇️ 943KB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"name":"🇰🇷 KR 468 | ⬇️ 44KB/s","port":1090,"server":"121.169.46.116","tls":false,"type":"socks5"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 469 | ⬇️ 987KB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"alterId":2,"cipher":"auto","name":"🇭🇰 HK 470 | ⬇️ 5KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"tls":false,"type":"vmess","udp":true,"uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"alterId":2,"cipher":"auto","name":"🇭🇰 HK 471 | ⬇️ 3KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"tls":false,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"alterId":2,"cipher":"auto","name":"🇭🇰 HK 472 | ⬇️ 6KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","tls":false,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"alterId":2,"cipher":"auto","client-fingerprint":"","name":"🇭🇰 HK 473 | ⬇️ 4KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","tls":false,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"alpn":[""],"alterId":2,"cipher":"auto","name":"🇭🇰 HK 474 | ⬇️ 5KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"tls":false,"type":"vmess","udp":true,"uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"alpn":[""],"alterId":2,"cipher":"auto","name":"🇭🇰 HK 475 | ⬇️ 6KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"tls":false,"type":"vmess","udp":true,"uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"alterId":2,"cipher":"auto","country":"🇨🇳 CN","delay":1214,"http-opts":{},"name":"🇭🇰 HK 476 | ⬇️ 6KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484","ws-path":"/"}
+ - {"alterId":2,"cipher":"auto","name":"🇭🇰 HK 477 | ⬇️ 3KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","tls":false,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"alpn":[""],"alterId":2,"cipher":"auto","name":"🇭🇰 HK 478 | ⬇️ 3KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"tls":false,"type":"vmess","udp":true,"uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"alterId":2,"cipher":"auto","name":"🇭🇰 HK 479 | ⬇️ 4KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","tls":false,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"client-fingerprint":"firefox","name":"🇩🇪 DE 480 | ⬇️ 496KB/s","network":"tcp","packet-encoding":"xudp","port":443,"server":"217.60.193.1","servername":"ddc-akn.astralweb.tech","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"5c192fd7-ef98-4112-a20c-129108fcd7e9"}
+ - {"alterId":2,"cipher":"auto","country":"🇮🇷IR","h2-opts":{},"http-opts":{},"name":"🇭🇰 HK 481 | ⬇️ 11KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"alterId":2,"cipher":"auto","country":"🇮🇷IR","h2-opts":{},"http-opts":{},"name":"🇭🇰 HK 482 | ⬇️ 3KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"alpn":[""],"alterId":2,"cipher":"auto","name":"🇭🇰 HK 483 | ⬇️ 5KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"tls":false,"type":"vmess","udp":true,"uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"alterId":2,"cipher":"auto","name":"🇭🇰 HK 484 | ⬇️ 5KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","tls":false,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"alpn":[""],"alterId":2,"cipher":"auto","name":"🇭🇰 HK 485 | ⬇️ 4KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"tls":false,"type":"vmess","udp":true,"uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"alterId":2,"cipher":"auto","country":"🇸🇬SG","h2-opts":{},"http-opts":{},"name":"🇭🇰 HK 486 | ⬇️ 5KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"alterId":2,"cipher":"auto","client-fingerprint":"","name":"🇭🇰 HK 487 | ⬇️ 5KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","tls":false,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 488 | ⬇️ 4MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 489 | ⬇️ 38KB/s","network":"tcp","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"alterId":2,"cipher":"auto","name":"🇭🇰 HK 490 | ⬇️ 6KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","tls":false,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 491 | ⬇️ 5MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"name":"🇮🇳 IN 492 | ⬇️ 9KB/s","password":"","port":1088,"server":"144.24.111.128","type":"socks5","username":""}
+ - {"alterId":2,"cipher":"auto","country":"🇮🇷IR","h2-opts":{},"http-opts":{},"name":"🇭🇰 HK 493 | ⬇️ 5KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 494 | ⬇️ 962KB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"client-fingerprint":"qq","grpc-opts":{"grpc-mode":"gun","grpc-service-name":"5post.gate.v1"},"name":"🇫🇮 FI 495 | ⬇️ 1MB/s","network":"grpc","port":443,"reality-opts":{"public-key":"V6FabatADtcX7aO9KMjGCadJC4LuQ_5nRViab-z-nFQ","short-id":"abcd"},"server":"95.163.232.183","servername":"5post-gate.x5.ru","tls":true,"type":"vless","udp":true,"uuid":"ee0be4b8-b1ad-49e8-8336-8cec3570d089"}
+ - {"alpn":[""],"alterId":2,"cipher":"auto","name":"🇭🇰 HK 496 | ⬇️ 5KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"tls":false,"type":"vmess","udp":true,"uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"alterId":2,"cipher":"auto","name":"🇭🇰 HK 497 | ⬇️ 4KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":false,"tls":false,"type":"vmess","udp":true,"uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 498 | ⬇️ 1MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"client-fingerprint":"chrome","encryption":"none","flow":"xtls-rprx-vision","name":"🇺🇸 US 499 | ⬇️ 43KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"alterId":2,"cipher":"auto","name":"🇭🇰 HK 500 | ⬇️ 3KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":false,"tls":false,"type":"vmess","udp":true,"uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"name":"🇺🇸 US 501 | ⬇️ 6MB/s","password":"","port":44499,"server":"45.61.188.134","type":"socks5","username":""}
+ - {"client-fingerprint":"chrome","encryption":"none","flow":"xtls-rprx-vision","name":"🇺🇸 US 502 | ⬇️ 101KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"name":"🇩🇪 DE 503 | ⬇️ 10KB/s","network":"tcp","password":"ba07a8af-5544-48ac-ab62-3b6c00a44fa6","port":20041,"server":"Hkdcrtc-e.catcat321.com","skip-cert-verify":true,"sni":"de.catxstar.com","type":"trojan","udp":true}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 504 | ⬇️ 259KB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"alpn":[""],"alterId":2,"cipher":"auto","name":"🇭🇰 HK 505 | ⬇️ 6KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"tls":false,"type":"vmess","udp":true,"uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"alterId":2,"cipher":"auto","country":"🇮🇷IR","h2-opts":{},"http-opts":{},"name":"🇭🇰 HK 506 | ⬇️ 6KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"name":"🇰🇷 KR 507 | ⬇️ 136KB/s","port":1090,"server":"121.169.46.116","tls":false,"type":"socks5","username":"Og%3D%3D"}
+ - {"client-fingerprint":"chrome","encryption":"none","flow":"xtls-rprx-vision","name":"🇺🇸 US 508 | ⬇️ 40KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 509 | ⬇️ 142KB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"alterId":2,"cipher":"auto","country":"🇮🇷IR","h2-opts":{},"http-opts":{},"name":"🇭🇰 HK 510 | ⬇️ 3KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"name":"🇩🇪 DE 511 | ⬇️ 87KB/s","network":"tcp","password":"ba07a8af-5544-48ac-ab62-3b6c00a44fa6","port":20041,"server":"Hkdcrtc-e.catcat321.com","skip-cert-verify":true,"sni":"de.catxstar.com","type":"trojan"}
+ - {"name":"🇳🇱 NL 512 | ⬇️ 3MB/s","password":"Private","port":1080,"server":"85.17.179.81","type":"socks5","username":"M_YOU_D"}
+ - {"client-fingerprint":"chrome","flow":"xtls-rprx-vision","name":"🇺🇸 US 513 | ⬇️ 24KB/s","network":"tcp","packet-encoding":"xudp","port":993,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 514 | ⬇️ 2MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 515 | ⬇️ 1MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"name":"🇺🇸 US 516 | ⬇️ 14KB/s","password":"","port":22222,"server":"193.25.215.182","tls":false,"type":"socks5","username":""}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 517 | ⬇️ 5MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"name":"🇺🇸 US 518 | ⬇️ 1008KB/s","password":"","port":22222,"server":"193.25.215.182","type":"socks5","username":""}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 519 | ⬇️ 1MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"client-fingerprint":"chrome","name":"🇩🇪 DE 520 | ⬇️ 247KB/s","network":"tcp","password":"ba07a8af-5544-48ac-ab62-3b6c00a44fa6","port":20041,"server":"hkdcrtc-e.catcat321.com","skip-cert-verify":true,"sni":"hkdcrtc-e.catcat321.com","type":"trojan"}
+ - {"client-fingerprint":"chrome","name":"🇩🇪 DE 521 | ⬇️ 737KB/s","network":"tcp","password":"ba07a8af-5544-48ac-ab62-3b6c00a44fa6","port":20041,"server":"hkdcrtc-e.catcat321.com","skip-cert-verify":true,"sni":"hkdcrtc-e.catcat321.com","type":"trojan"}
+ - {"name":"🇩🇪 DE 522 | ⬇️ 231KB/s","network":"tcp","password":"ba07a8af-5544-48ac-ab62-3b6c00a44fa6","port":20041,"server":"Hkdcrtc-e.catcat321.com","skip-cert-verify":true,"sni":"de.catxstar.com","type":"trojan"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 523 | ⬇️ 2MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 524 | ⬇️ 7MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 525 | ⬇️ 3MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 526 | ⬇️ 1MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"name":"🇩🇪 DE 527 | ⬇️ 597KB/s","network":"tcp","password":"ba07a8af-5544-48ac-ab62-3b6c00a44fa6","port":20041,"server":"hkdcrtc-e.catcat321.com","skip-cert-verify":true,"sni":"de.catxstar.com","type":"trojan","udp":true}
+ - {"name":"🇮🇳 IN 528 | ⬇️ 10KB/s","password":"","port":1088,"server":"144.24.111.128","type":"socks5","username":""}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 529 | ⬇️ 1MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"alterId":2,"cipher":"auto","name":"🇭🇰 HK 530 | ⬇️ 5KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"tls":false,"type":"vmess","udp":true,"uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"name":"🇮🇳 IN 531 | ⬇️ 12KB/s","password":"","port":1088,"server":"144.24.111.128","type":"socks5","username":""}
+ - {"alpn":["h3"],"auth-str":"dongtaiwang.com","down":"1000","name":"🇩🇪 DE 532 | ⬇️ 3MB/s","port":20088,"protocol":"udp","server":"5.83.129.153","skip-cert-verify":true,"sni":"apple.com","sub-tag":"R002-260618","type":"hysteria","up":"500"}
+ - {"name":"🇰🇷 KR 533 | ⬇️ 36KB/s","password":"","port":1090,"server":"121.169.46.116","skip-cert-verify":true,"type":"socks5","username":""}
+ - {"alterId":2,"cipher":"auto","name":"🇭🇰 HK 534 | ⬇️ 3KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","tls":false,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"client-fingerprint":"chrome","encryption":"none","name":"🇺🇸 US 535 | ⬇️ 8KB/s","network":"xhttp","packet-encoding":"xudp","port":443,"reality-opts":{"public-key":"Nnpwm8dqFl9dlMJmg0M9G11vmgCKzNagFTn4tH4sWy4"},"server":"88.218.44.4","servername":"swcdn.apple.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4","xhttp-opts":{"mode":"auto","path":"/"}}
+ - {"name":"🇰🇷 KR 536 | ⬇️ 37KB/s","password":"","port":1090,"server":"121.169.46.116","type":"socks5","username":"Og%3D%3D"}
+ - {"name":"🇳🇱 NL 537 | ⬇️ 25KB/s","password":"Private","port":1080,"server":"85.17.179.81","type":"socks5","username":"M_YOU_D"}
+ - {"name":"🇳🇱 NL 538 | ⬇️ 40KB/s","password":"Private","port":1080,"server":"85.17.179.81","tls":false,"type":"socks5","username":"M_YOU_D"}
+ - {"client-fingerprint":"chrome","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 539 | ⬇️ 99KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"Rt2wltCWOxIroFggNWMudZDBJXls8DsF4icaWqxKDk8"},"server":"88.218.44.4","servername":"dl.google.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"name":"🇭🇰 HK 540 | ⬇️ 3MB/s","network":"ws","password":"87961f9d-bee1-4377-826b-e169e7891c4f","port":443,"server":"xn--b6gac.eu.org","skip-cert-verify":true,"sni":"yks-dd9.pages.dev","type":"trojan","ws-opts":{"path":"/"}}
+ - {"name":"🇰🇷 KR 541 | ⬇️ 8KB/s","password":"","port":1090,"server":"121.169.46.116","skip-cert-verify":true,"type":"socks5","username":""}
+ - {"name":"🇰🇷 KR 542 | ⬇️ 412KB/s","port":1090,"server":"121.169.46.116","tls":false,"type":"socks5","username":"Og%3D%3D"}
+ - {"alterId":2,"cipher":"auto","country":"🇮🇷IR","h2-opts":{},"http-opts":{},"name":"🇭🇰 HK 543 | ⬇️ 5KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"name":"🇩🇪 DE 544 | ⬇️ 2MB/s","password":"9d3356a0-c07e-43cc-b30e-450bd50521b8","port":2056,"server":"flkf3.mangshe.xyz","skip-cert-verify":true,"sni":"flkf3.mangshe.xyz","tfo":false,"type":"hysteria2"}
+ - {"alterId":2,"cipher":"auto","name":"🇭🇰 HK 545 | ⬇️ 4KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","tls":false,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 546 | ⬇️ 7MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 547 | ⬇️ 7MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"alterId":2,"cipher":"auto","country":"🇨🇳CN","delay":821,"h2-opts":{},"http-opts":{},"name":"🇭🇰 HK 548 | ⬇️ 7KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 549 | ⬇️ 1MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"name":"🇰🇷 KR 550 | ⬇️ 32KB/s","port":1090,"server":"121.169.46.116","tls":false,"type":"socks5","username":"Og%3D%3D"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 551 | ⬇️ 3MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"name":"🇳🇱 NL 552 | ⬇️ 1MB/s","password":"","port":1080,"server":"5.255.123.162","type":"socks5","username":""}
+ - {"name":"🇰🇷 KR 553 | ⬇️ 11KB/s","password":"","port":1090,"server":"121.169.46.116","tls":false,"type":"socks5","username":"T2clM0QlM0Q6"}
+ - {"client-fingerprint":"chrome","encryption":"none","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇫🇮 FI 554 | ⬇️ 639KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"D2SXHZRRYM0WcFChGWd57XB-U73aIsGfMpe2-Gq5XSs"},"server":"170.168.97.3","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"5e243126-4a2a-84b6-782a-73b14797fb5f"}
+ - {"client-fingerprint":"qq","encryption":"none","grpc-opts":{"grpc-service-name":"5post.gate.v1","path":"/"},"name":"🇫🇮 FI 555 | ⬇️ 1MB/s","network":"grpc","packet-encoding":"xudp","port":443,"reality-opts":{"public-key":"V6FabatADtcX7aO9KMjGCadJC4LuQ_5nRViab-z-nFQ","short-id":"abcd"},"server":"95.163.232.183","servername":"5post-gate.x5.ru","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"236d1f18-40c5-49d8-9611-85355754c326"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 556 | ⬇️ 3MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"name":"🇳🇱 NL 557 | ⬇️ 10MB/s","password":"","port":1080,"server":"5.255.123.162","type":"socks5","username":""}
+ - {"alpn":[""],"alterId":2,"cipher":"auto","name":"🇭🇰 HK 558 | ⬇️ 5KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"tls":false,"type":"vmess","udp":true,"uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"client-fingerprint":"firefox","grpc-opts":{"grpc-service-name":"TunService","path":"/"},"name":"🇺🇸 US 559 | ⬇️ 33KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"e6d41d6f-d58a-7650-bba4-d7f0dde3ba4d"}
+ - {"alterId":2,"cipher":"auto","name":"🇭🇰 HK 560 | ⬇️ 6KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","tls":false,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"name":"🇰🇷 KR 561 | ⬇️ 102KB/s","password":"","port":1090,"server":"121.169.46.116","type":"socks5","username":"Og%3D%3D"}
+ - {"alterId":2,"cipher":"auto","client-fingerprint":"","name":"🇭🇰 HK 562 | ⬇️ 3KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","tls":false,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 563 | ⬇️ 2MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"client-fingerprint":"qq","grpc-opts":{"grpc-mode":"gun","grpc-service-name":"5post.gate.v1"},"name":"🇫🇮 FI 564 | ⬇️ 1MB/s","network":"grpc","port":443,"reality-opts":{"public-key":"V6FabatADtcX7aO9KMjGCadJC4LuQ_5nRViab-z-nFQ","short-id":"abcd"},"server":"95.163.232.183","servername":"5post-gate.x5.ru","tls":true,"type":"vless","udp":true,"uuid":"28d6ded5-597f-4fd6-bffe-58168eafe2ae"}
+ - {"name":"🇭🇰 HK 565 | ⬇️ 14KB/s","password":"123","port":3060,"server":"43.100.43.112","type":"socks5","username":"123"}
+ - {"name":"🇳🇱 NL 566 | ⬇️ 1MB/s","password":"Private","port":1080,"server":"85.17.179.81","tls":false,"type":"socks5","username":"M_YOU_D"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 567 | ⬇️ 6MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"client-fingerprint":"chrome","encryption":"none","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇫🇮 FI 568 | ⬇️ 139KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"D2SXHZRRYM0WcFChGWd57XB-U73aIsGfMpe2-Gq5XSs"},"server":"170.168.97.3","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"5e243126-4a2a-84b6-782a-73b14797fb5f"}
+ - {"name":"🇭🇰 HK 569 | ⬇️ 3KB/s","password":"123","port":3060,"server":"43.100.43.112","type":"socks5","username":"123"}
+ - {"multiplexing":"MULTIPLEXING_LOW","name":"🇺🇸 US 570 | ⬇️ 2MB/s","password":"dongtaiwang.com","port":34567,"server":"157.254.223.44","transport":"TCP","type":"mieru","username":"dongtaiwang.com"}
+ - {"delay":1527,"name":"🇰🇷 KR 571 | ⬇️ 115KB/s","port":1090,"server":"121.169.46.116","skip-cert-verify":true,"type":"socks5","udp":true}
+ - {"client-fingerprint":"chrome","grpc-opts":{"grpc-service-name":"TunService"},"name":"🇺🇸 US 572 | ⬇️ 77KB/s","network":"grpc","packet-encoding":"xudp","port":8443,"reality-opts":{"public-key":"EG3y7UktGRlzSZZ2oXT_YaO2gVP4ca3Xe6AQ0u9A5DQ"},"server":"88.218.44.4","servername":"download.nvidia.com","skip-cert-verify":false,"tls":true,"type":"vless","udp":true,"uuid":"7c74b0e4-f132-5583-4692-622a7d6b71a4"}
+ - {"name":"🇰🇷 KR 573 | ⬇️ 349KB/s","password":"111","port":20000,"server":"101.33.74.115","type":"socks5","username":"111"}
+ - {"alterId":2,"cipher":"auto","country":"🇭🇰HK","h2-opts":{},"http-opts":{},"name":"🇮🇪 IE 574 | ⬇️ 5KB/s","network":"tcp","port":30804,"server":"v4.hdacd.com","skip-cert-verify":true,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"client-fingerprint":"chrome","name":"🇭🇰 HK 575 | ⬇️ 2MB/s","network":"ws","password":"87961f9d-bee1-4377-826b-e169e7891c4f","port":443,"server":"172.66.173.172","sni":"yks-dd9.pages.dev","type":"trojan","ws-opts":{"early-data-header-name":"Sec-WebSocket-Protocol","max-early-data":2048,"path":"/"}}
+ - {"name":"🇳🇱 NL 576 | ⬇️ 24KB/s","password":"Private","port":1080,"server":"85.17.179.81","type":"socks5","username":"M_YOU_D"}
+ - {"client-fingerprint":"chrome","name":"🇭🇰 HK 577 | ⬇️ 3MB/s","network":"ws","password":"87961f9d-bee1-4377-826b-e169e7891c4f","port":443,"server":"104.25.242.132","sni":"yks-dd9.pages.dev","type":"trojan","ws-opts":{"early-data-header-name":"Sec-WebSocket-Protocol","max-early-data":2048,"path":"/"}}
+ - {"client-fingerprint":"chrome","name":"🇭🇰 HK 578 | ⬇️ 12MB/s","network":"ws","password":"87961f9d-bee1-4377-826b-e169e7891c4f","port":443,"server":"172.64.35.26","sni":"yks-dd9.pages.dev","type":"trojan","ws-opts":{"early-data-header-name":"Sec-WebSocket-Protocol","max-early-data":2048,"path":"/"}}
+ - {"alterId":2,"cipher":"auto","name":"🇭🇰 HK 579 | ⬇️ 5KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","tls":false,"type":"vmess","uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"alpn":[""],"alterId":2,"cipher":"auto","name":"🇭🇰 HK 580 | ⬇️ 3KB/s","network":"tcp","port":30809,"server":"v9.hdacd.com","skip-cert-verify":true,"tls":false,"type":"vmess","udp":true,"uuid":"cbb3f877-d1fb-344c-87a9-d153bffd5484"}
+ - {"encryption":"none","name":"🇷🇺 RU 581 | ⬇️ 7KB/s","network":"ws","packet-encoding":"xudp","port":4100,"server":"201.51.0.38","skip-cert-verify":false,"tls":false,"type":"vless","udp":true,"uuid":"e7299042-7d8f-440f-8368-2516b0e69341","ws-opts":{"path":"/v1"}}
+ - {"client-fingerprint":"chrome","name":"🇯🇵 JP 582 | ⬇️ 444KB/s","network":"tcp","password":"ba07a8af-5544-48ac-ab62-3b6c00a44fa6","port":20004,"server":"oplosgru-c.catcat321.com","skip-cert-verify":true,"sni":"oplosgru-c.catcat321.com","type":"trojan"}

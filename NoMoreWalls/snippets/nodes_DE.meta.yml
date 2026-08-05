@@ -9,39 +9,32 @@ proxies:
 - name: 🇩🇪德国
   password: 67a1454f-5a95-4e30-9723-1ffcbe7e97f9
   port: 443
-  server: taga5.api3-max.ru
-  sni: taga5.api3-max.ru
-  tls: false
-  type: hysteria2
-- name: '🇩🇪德国 #1'
-  password: 67a1454f-5a95-4e30-9723-1ffcbe7e97f9
-  port: 443
   server: taga8.api3-max.ru
   sni: taga8.api3-max.ru
   tls: false
   type: hysteria2
-- name: '🇬🇧英国 #1'
-  password: 67a1454f-5a95-4e30-9723-1ffcbe7e97f9
+- name: '德国 #1'
+  password: 71cada65-d23e-418c-88e4-a06188d14689
   port: 443
-  server: wopa3.api3-max.ru
-  sni: wopa3.api3-max.ru
+  server: de-two.quiet-rogue.site
+  sni: de-two.quiet-rogue.site
   tls: false
   type: hysteria2
-- name: '德国 #1'
+- name: '德国 #2'
   password: 8645697d-51c1-4e90-aca5-ba63a0392f11
   port: 443
   server: cze-01.node.lumixnet.com
   sni: cze-01.node.lumixnet.com
   tls: false
   type: hysteria2
-- name: '🇩🇪德国 #3'
+- name: '🇩🇪德国 #1'
   password: 8ffbff3b-12c9-4d49-af97-93a8d6cb4edb
   port: 443
   server: de2.sunconnecthub.com
   sni: de2.sunconnecthub.com
   tls: false
   type: hysteria2
-- name: '🇩🇪德国 #4'
+- name: '🇩🇪德国 #2'
   password: Krab9Hyst2_Rk7pQ2xL
   port: 36723
   server: de2.vpn.legendaah.xyz
@@ -59,104 +52,30 @@ proxies:
   sni: api.kermanshahi.org
   tls: false
   type: hysteria2
-- name: '德国 #2'
+- name: '德国 #3'
   password: d1224950-ffab-4b9a-8696-431b40a6cfbd
   port: 443
   server: bel-03.node.lumixnet.com
   sni: bel-03.node.lumixnet.com
   tls: false
   type: hysteria2
-- name: 💫22@oneclickvpnkeys
-  obfs: salamander
-  obfs-password: 3sv5vpdl9xr84lyb
-  password: 22j0d00lev7mq0yv
-  port: 443
-  server: social.klipp.su
-  sni: social.klipp.su
-  tls: false
-  type: hysteria2
-- name: '🇩🇪133844 | ⚡️Telegram = t.me/S... #1'
-  obfs: salamander
-  obfs-password: 3sv5vpdl9xr84lyb
-  password: 22j0d00lev7mq0yv
-  port: 443
-  server: soskeynets.klipp.su
-  sni: social.klipp.su
-  tls: false
-  type: hysteria2
-- name: 🧬26@SHAHSERVER1
-  password: 9Me_Jx935gnHx13_Nx45M_NYXe037js_Be4z
-  port: 8443
-  server: 76.164.202.213
-  sni: mercedes-grape.yyuyy.com
-  tls: false
-  type: hysteria2
-- name: 💫23@oneclickvpnkeys
-  password: 9d3356a0-c07e-43cc-b30e-450bd50521b8
-  port: 2056
-  server: flkf3.mangshe.xyz
-  skip-cert-verify: true
-  sni: flkf3.mangshe.xyz
-  tls: false
-  type: hysteria2
-- name: '🇩🇪133845 | ⚡️Telegram = t.me/S... #1'
-  password: 9d3356a0-c07e-43cc-b30e-450bd50521b8
-  port: 2056
-  server: soskeynets.mangshe.xyz
-  skip-cert-verify: true
-  sni: flkf3.mangshe.xyz
-  tls: false
-  type: hysteria2
 - alpn:
-  - http/1.1
-  name: 🇩🇪DE_1|1.4MB/s
-  network: ws
-  password: ersi13mjahoao8e6
-  port: 443
-  server: nexigen.pro
-  skip-cert-verify: true
-  sni: ramz.xuithree.dpdns.org
-  type: trojan
-  udp: true
-  ws-opts:
-    headers:
-      Host: ramz.xuithree.dpdns.org
-    path: /dksk
-- client-fingerprint: qq
-  grpc-opts:
-    grpc-mode: gun
-    grpc-service-name: 5post.gate.v1
-  name: 🇩🇪DE_2|1.1MB/s
-  network: grpc
-  port: 443
-  reality-opts:
-    public-key: V6FabatADtcX7aO9KMjGCadJC4LuQ_5nRViab-z-nFQ
-    short-id: '!!str abcd'
-  server: 95.163.232.183
-  servername: 5post-gate.x5.ru
-  tls: true
-  type: vless
-  udp: true
-  uuid: ee0be4b8-b1ad-49e8-8336-8cec3570d089
-- name: 🇩🇪DE_3|1.6MB/s
-  network: ws
-  port: 443
-  server: cloudflare-ip.mofashi.ltd
-  servername: hn205.54dn.96i.hh.vavava.kdns.fr
-  skip-cert-verify: true
-  tls: true
-  type: vless
-  udp: true
-  uuid: 47fcef29-ab4e-4aa6-932b-d95a18f28a4e
-  ws-opts:
-    headers:
-      Host: hn205.54dn.96i.hh.vavava.kdns.fr
-    path: /?ed=2560
+  - h3
+  client-fingerprint: chrome
+  name: Telegram@VPNjey🇩🇪🇩🇪
+  obfs: salamander
+  obfs-password: 83v9muumcyikh5ch
+  password: TelegramVPNjey
+  port: 37003
+  server: 179.61.251.253
+  sni: de.jey.cc.cd
+  tls: false
+  type: hysteria2
 - client-fingerprint: qq
   encryption: none
   grpc-opts:
     grpc-service-name: 5post.gate.v1
-  name: 🇩🇪DE_4|1.1MB/s
+  name: 🇩🇪DE_1|1.2MB/s
   network: grpc
   port: '443'
   reality-opts:
@@ -167,5 +86,5 @@ proxies:
   tls: true
   type: vless
   udp: true
-  uuid: cf08bea6-fc7f-47b2-a6e2-15dd3c8b3dc7
+  uuid: 7c160962-7cfc-4c4d-ad14-d25a79b955af
   xudp: true
