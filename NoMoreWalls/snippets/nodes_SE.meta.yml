@@ -29,17 +29,17 @@ proxies:
   sni: dash.cloudflare.com
   tls: false
   type: hysteria2
-- client-fingerprint: random
-  name: 🇸🇪SE_1|3.1MB/s
-  network: ws
-  port: 443
-  server: ct.877774.xyz
-  servername: se-sto.862400.xyz
+- client-fingerprint: chrome
+  encryption: none
+  grpc-opts:
+    grpc-service-name: vlgrpc
+  name: 🇸🇪SE_1|4.1MB/s
+  network: grpc
+  port: '443'
+  server: srv-5728.atlanta-games.com
+  servername: srv-5728.atlanta-games.com
   tls: true
   type: vless
   udp: true
-  uuid: 98ca432c-4dd0-452e-a49c-552620e14358
-  ws-opts:
-    headers:
-      Host: se-sto.862400.xyz
-    path: /announcement
+  uuid: 843b7f51-16cc-42ca-a047-8d32879ff1e5
+  xudp: true
