@@ -7,7 +7,7 @@ proxies:
   sni: www.lamer.com.hk
   tls: false
   type: hysteria2
-- name: 🤖41@oneclickvpnkeys
+- name: 💫12@oneclickvpnkeys
   password: 9Me_Jx935gnHx13_Nx45M_NYXe037js_Be4z
   port: 8443
   server: 76.164.202.214
@@ -40,29 +40,10 @@ proxies:
   sni: fr2.xiaoliyu.cyou
   tls: false
   type: hysteria2
-- client-fingerprint: chrome
-  encryption: none
-  name: 🇫🇷FR_1|2.8MB/s
-  network: ws
+- name: 🪁49@oneclickvpnkeys
+  password: qIg7TMxfJvx6t27er0c9P0osebAAPu2PYlB_aoWelV5kVVQ2
   port: 443
-  server: paul.ns.cloudflare.com
-  servername: ziro.skin
-  tls: true
-  type: vless
-  udp: true
-  uuid: f028a8c0-6763-4558-aee3-2563db9d7825
-  ws-opts:
-    headers:
-      Host: ziro.skin
-      User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36
-        (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36
-    path: /xxvclws
-  xudp: true
-- name: 🇫🇷FR_2|3.4MB/s
-  password: 6d4abac0-86e6-11ef-83cc-f23c913c8d2b
-  port: '443'
-  server: d6bf69ca-tcxds0-td1l1t-1s824.fr.oshuawei.com
-  skip-cert-verify: true
-  tls: true
-  type: http
-  username: 6d4abac0-86e6-11ef-83cc-f23c913c8d2b
+  server: 194.180.174.69
+  sni: fr2.h2corp.org
+  tls: false
+  type: hysteria2
