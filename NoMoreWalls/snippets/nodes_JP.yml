@@ -2,8 +2,8 @@ proxies:
 - name: 日本|@ripaojiedian
   network: tcp
   password: BxceQaOe
-  port: 4099
-  server: 16.162.3.64
+  port: 9408
+  server: 95.40.58.84
   skip-cert-verify: true
   sni: t.me%252Fripaojiedian
   type: trojan
@@ -23,10 +23,3 @@ proxies:
   skip-cert-verify: false
   sni: www.nintendogames.net
   type: trojan
-- cipher: aes-256-cfb
-  name: 🇯🇵JP_1|6.1MB/s
-  password: amazonskr05
-  port: '443'
-  server: 13.115.57.197
-  type: ss
-  udp: true

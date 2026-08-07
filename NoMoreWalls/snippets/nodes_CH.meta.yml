@@ -1,6 +1,5 @@
 proxies:
-- auth: 99800091-8337-4112-8756-8cc60eb1ffa8
-  name: 🇳🇱NL_1|1.0MB/s
+- name: 🇨🇭瑞士
   password: 99800091-8337-4112-8756-8cc60eb1ffa8
   port: 10808
   server: nl6.unlockvpn.online
