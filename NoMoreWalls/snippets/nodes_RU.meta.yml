@@ -20,7 +20,7 @@ proxies:
   sni: de-two.quiet-rogue.site
   tls: false
   type: hysteria2
-- name: 🪁33@oneclickvpnkeys
+- name: '荷兰 #5'
   password: gf1
   port: 443
   server: 5.129.235.85
@@ -28,11 +28,13 @@ proxies:
   sni: www.linux.com
   tls: false
   type: hysteria2
-- client-fingerprint: edge
-  encryption: none
-  name: 🇷🇺RU_1|1.0MB/s
+- alpn:
+  - h2
+  - http/1.1
+  client-fingerprint: chrome
+  name: 🇷🇺RU_1|1.2MB/s
   network: xhttp
-  port: '443'
+  port: 443
   server: 135.106.140.23
   servername: qwesd.rutendingaltos.top
   tls: true
@@ -42,4 +44,3 @@ proxies:
   xhttp-opts:
     host: qwesd.rutendingaltos.top
     path: /assets/build/_app/immutable/chunks/stream-one/
-  xudp: true

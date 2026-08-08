@@ -39,7 +39,39 @@ proxies:
   skip-cert-verify: true
   sni: www.nintendogames.net
   type: trojan
-- name: 🇯🇵JP_1|3.9MB/s
+- client-fingerprint: chrome
+  grpc-opts:
+    grpc-mode: gun
+    grpc-service-name: update
+  name: 🇯🇵JP_1|4.9MB/s
+  network: grpc
+  port: 10035
+  reality-opts:
+    public-key: wOu-BMrXvk9KX23JZrlpUlF4SMjDcejm0vNECdhy5xE
+    short-id: '!!str 686c0ef0'
+  server: 18.181.77.188
+  servername: s0.awsstatic.com
+  tls: true
+  type: vless
+  udp: true
+  uuid: 7651FEC2-07B1-4904-8985-8EAAA1B781F3
+- client-fingerprint: chrome
+  grpc-opts:
+    grpc-mode: gun
+    grpc-service-name: update
+  name: 🇯🇵JP_2|4.5MB/s
+  network: grpc
+  port: 10035
+  reality-opts:
+    public-key: wOu-BMrXvk9KX23JZrlpUlF4SMjDcejm0vNECdhy5xE
+    short-id: '!!str 686c0ef0'
+  server: jp5-r.link-t7.com
+  servername: s0.awsstatic.com
+  tls: true
+  type: vless
+  udp: true
+  uuid: 7651FEC2-07B1-4904-8985-8EAAA1B781F3
+- name: 🇯🇵JP_3|4.9MB/s
   password: f93d0a97-c3a8-47af-b2be-ea4904c9918b
   port: 17968
   server: jjz.jjznodenode.top
@@ -47,15 +79,3 @@ proxies:
   sni: jjz.jjznodenode.top
   type: anytls
   udp: true
-- down: ''
-  fingerprint: ''
-  name: 🇯🇵JP_2|4.7MB/s
-  obfs: ''
-  obfs-password: ''
-  password: claire123
-  port: '8443'
-  server: 60.71.150.71
-  skip-cert-verify: true
-  sni: tuimao.space
-  type: hysteria2
-  up: ''
